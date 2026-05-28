@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Nhân Viên | Mercedes-Benz Việt Nam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <header></header>
+    <main class="admin-page-section employee-dashboard">
+        <div class="admin-card employee-card">
+            <h1 class="admin-page-title">Dashboard Nhân Viên</h1>
+            <p class="employee-welcome-text">Chào mừng nhân viên đến với hệ thống. Tài khoản của bạn đã được tạo và có thể đăng nhập bình thường.</p>
+            <div class="employee-actions">
+                <a href="/" class="btn-gold">Về trang chủ</a>
+                <button class="btn-gold btn-inline" onclick="logout()">Đăng xuất</button>
+            </div>
+            <section class="employee-section">
+                <h2 class="employee-heading">Quyền hạn nhân viên</h2>
+                <p class="employee-body">Nhân viên hiện tại có thể đăng nhập và sử dụng các chức năng chung của website. Nếu bạn muốn, tôi có thể mở rộng thêm bảng điều khiển nhân viên với các tính năng riêng như xử lý đơn hàng, quản lý lịch hẹn, hoặc phản hồi khách hàng.</p>
+            </section>
+        </div>
+    </main>
+
+    <footer></footer>
+    <script src="../../js/api.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script>
+        const user = API.getCurrentUser();
+        if (!user || user.role !== 'employee') {
+            window.location.href = '/login';
+        }
+        function logout() {
+            API.logout();
+        }
+    </script>
+</body>
+</html>

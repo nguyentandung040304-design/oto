@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Xe | Mercedes-Benz Việt Nam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .product-container {
+            padding: 2rem 5% 4rem 5%;
+            margin-top: 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .product-gallery img {
+            width: 100%;
+            border-radius: 0;
+            border: 1px solid var(--border);
+        }
+
+        .spec-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+        }
+
+        .spec-item {
+            background: transparent;
+            padding: 1rem 1.2rem;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+        .spec-item:nth-child(even) {
+            border-right: none;
+        }
+        .spec-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .spec-value {
+            font-weight: 500;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-white);
+        }
+
+        /* Nút dưới trang chi tiết */
+        .btn-luxury,
+        .btn-outline-luxury {
+            height: 52px;
+            border-radius: 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-luxury {
+            background: var(--text-white);
+            color: var(--bg-dark);
+            border: 1px solid var(--text-white);
+        }
+
+        .btn-luxury:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .btn-outline-luxury {
+            background: transparent;
+            color: var(--text-white);
+            border: 1px solid var(--text-white);
+        }
+
+        .btn-outline-luxury:hover {
+            background: var(--text-white);
+            color: var(--bg-dark);
+        }
+
+    </style>
+</head>
+
+<body>
+    <header></header>
+
+    <div class="product-container" id="product-detail">
+        <!-- JS will populate -->
+        <p>Đang tải thông tin xe...</p>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (!id) return window.location.href = '/collection';
+
+            try {
+                const vehicle = await API.getVehicle(id);
+                const container = document.getElementById('product-detail');
+
+                container.innerHTML = `
+                    <div class="product-gallery">
+                        <img id="main-product-img" src="${vehicle.images && vehicle.images[0] ? vehicle.images[0] : '/images/xe1.jpg'}" alt="${vehicle.name}" style="width: 100%; border-radius: 2px; border: 1px solid var(--border); transition: opacity 0.3s ease;">
+                        <div style="margin-top: 1rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+                            ${(vehicle.images || []).map((img, idx) => `
+                                <img src="${img}" class="thumb-img" style="width: 80px; height: 60px; object-fit: cover; cursor: pointer; border-radius: 2px; border: 2px solid ${idx === 0 ? 'var(--primary)' : 'var(--border)'}; transition: 0.2s;" onclick="changeMainImage('${img}', this)">
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; font-weight: 500;">${vehicle.brand}</span>
+                        <h1 style="font-family: 'Inter', sans-serif; font-weight: 300; font-size: 2.5rem; margin: 0.5rem 0 1rem; letter-spacing: 1px; text-transform: uppercase; line-height: 1.1;">${vehicle.name}</h1>
+                        <p style="color: var(--text-muted); line-height: 1.7; font-size: 0.95rem; border-left: 2px solid var(--primary); padding-left: 1rem;">${vehicle.description || 'Không có mô tả cho dòng xe này.'}</p>
+                        
+                        <div style="margin: 2rem 0; padding: 1.5rem 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 0.4rem;">Giá tham khảo</div>
+                            <div style="font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 600; color: var(--text-white); display: flex; align-items: baseline; gap: 0.6rem;">
+                                <span>${new Intl.NumberFormat('vi-VN').format(vehicle.price)}</span>
+                                <span style="font-size: 1rem; font-weight: 400; color: var(--text-muted);">VNĐ</span>
+                            </div>
+                        </div>
+
+                        <div class="spec-grid">
+                            <div class="spec-item"><span class="spec-label">Động cơ</span><span class="spec-value">${vehicle.engine || 'N/A'}</span></div>
+                            <div class="spec-item"><span class="spec-label">Nhiên liệu</span><span class="spec-value">${vehicle.fuel}</span></div>
+                            <div class="spec-item"><span class="spec-label">Hộp số</span><span class="spec-value">${vehicle.transmission || 'N/A'}</span></div>
+                            <div class="spec-item"><span class="spec-label">Công suất</span><span class="spec-value">${vehicle.specs?.horsepower || 'N/A'} HP</span></div>
+                        </div>
+
+                        <div style="display: flex; gap: 1.2rem; margin-top: 2rem;">
+                            <button onclick="bookTestDrive('${vehicle._id}')" class="btn-outline-luxury" style="flex: 1;">Đặt Lịch Lái Thử</button>
+                            <button onclick="deposit('${vehicle._id}')" class="btn-luxury" style="flex: 1;">Đặt Cọc Ngay</button>
+                        </div>
+                        <div style="margin-top: 1rem;">
+                            <button onclick="toggleCompare('${vehicle._id}')" id="compare-btn" class="btn-outline-luxury" style="width: 100%; border-color: var(--border); color: #666666; font-size: 0.8rem; height: 48px;">Thêm vào so sánh</button>
+                        </div>
+                    </div>
+                `;
+                updateCompareButton(id);
+            } catch (e) {
+                console.error(e);
+            }
+        });
+
+        function changeMainImage(src, element) {
+            const mainImg = document.getElementById('main-product-img');
+            if (mainImg) {
+                mainImg.style.opacity = '0.5';
+                setTimeout(() => {
+                    mainImg.src = src;
+                    mainImg.style.opacity = '1';
+                }, 150);
+            }
+            document.querySelectorAll('.thumb-img').forEach(el => el.style.borderColor = 'transparent');
+            element.style.borderColor = 'var(--primary)';
+        }
+
+        function bookTestDrive(id) {
+            window.location.href = `/booking?vehicleId=${id}`;
+        }
+
+        function deposit(id) {
+            window.location.href = `/checkout?vehicleId=${id}`;
+        }
+
+        function toggleCompare(id) {
+            let list = JSON.parse(localStorage.getItem('compareList') || '[]');
+            const idx = list.indexOf(id);
+            if (idx > -1) {
+                list.splice(idx, 1);
+                alert('Đã xóa xe khỏi danh sách so sánh!');
+            } else {
+                if (list.length >= 3) {
+                    alert('Chỉ có thể so sánh tối đa 3 xe cùng lúc!');
+                    return;
+                }
+                list.push(id);
+                alert('Đã thêm xe vào danh sách so sánh!');
+            }
+            localStorage.setItem('compareList', JSON.stringify(list));
+            updateCompareButton(id);
+        }
+
+        function updateCompareButton(id) {
+            const list = JSON.parse(localStorage.getItem('compareList') || '[]');
+            const btn = document.getElementById('compare-btn');
+            if (btn) {
+                if (list.includes(id)) {
+                    btn.textContent = '✓ Đã chọn so sánh (Xóa)';
+                    btn.style.borderColor = 'var(--primary)';
+                    btn.style.color = 'var(--primary)';
+                } else {
+                    btn.textContent = '+ Thêm vào so sánh';
+                    btn.style.borderColor = 'var(--border)';
+                    btn.style.color = '#666666';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

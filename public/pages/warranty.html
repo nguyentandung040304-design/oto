@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch Hẹn Dịch Vụ | Mercedes-Benz Việt Nam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: var(--bg-dark);
+            color: var(--text-white);
+        }
+        .warranty-layout {
+            padding: 10rem 8% 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .warranty-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .warranty-eyebrow {
+            color: var(--primary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .warranty-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-white);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .warranty-desc {
+            color: #bbb;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .warranty-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .warranty-form-container {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+        .form-section-title {
+            margin-bottom: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            font-size: 1.4rem;
+            color: var(--text-white);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: var(--bg-dark) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text-white) !important;
+            padding: 0.85rem;
+            border-radius: 0;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary) !important;
+        }
+
+        .service-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .type-option {
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 0;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: var(--bg-dark);
+            color: var(--text-white);
+        }
+        .type-option:hover {
+            border-color: #666;
+        }
+        .type-option.active {
+            border-color: var(--primary);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1.1rem;
+            font-weight: 600;
+            border-radius: 0;
+            background: var(--primary);
+            color: #000000;
+            border: none;
+            cursor: pointer;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background: #b3922b;
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 2rem;
+        }
+        .info-card-title {
+            color: var(--text-white);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        .info-card-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .info-card-list li {
+            margin-bottom: 1rem;
+            color: #bbb;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <div class="warranty-layout">
+        <div class="warranty-header">
+            <p class="warranty-eyebrow">Dịch Vụ Hậu Mãi Đẳng Cấp</p>
+            <h1 class="warranty-title">Bảo Hành &amp; Bảo Dưỡng</h1>
+            <p class="warranty-desc">Chúng tôi cam kết mang lại sự an tâm tuyệt đối trên mọi hành trình. Đội ngũ kỹ thuật viên chuyên nghiệp được đào tạo theo tiêu chuẩn Mercedes-Benz toàn cầu sẽ chăm sóc chiếc xe của Quý khách tốt nhất.</p>
+        </div>
+
+        <div class="warranty-grid">
+            <div class="warranty-form-container">
+                <h3 class="form-section-title">Đặt Lịch Hẹn Dịch Vụ</h3>
+                <form id="warranty-form">
+                    <div class="form-group">
+                        <label>Yêu cầu dịch vụ</label>
+                        <div class="service-type-grid">
+                            <div class="type-option active" data-type="bảo hành">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🛡️</div>
+                                <div>Yêu Cầu Bảo Hành</div>
+                            </div>
+                            <div class="type-option" data-type="bảo dưỡng">
+                                <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">⚙️</div>
+                                <div>Lịch Hẹn Bảo Dưỡng</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div class="form-group">
+                            <label>Ngày Hẹn</label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Khung Giờ</label>
+                            <select id="timeslot" required>
+                                <option value="08:00 - 10:00">Sáng (08:00 - 10:00)</option>
+                                <option value="10:00 - 12:00">Sáng (10:00 - 12:00)</option>
+                                <option value="14:00 - 16:00">Chiều (14:00 - 16:00)</option>
+                                <option value="16:00 - 18:00">Chiều (16:00 - 18:00)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Thông Tin Xe (Tên xe &amp; Biển số)</label>
+                        <input type="text" id="vehicle-info" placeholder="Ví dụ: Mercedes-Benz GLC 300 - 30A-999.99" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chi tiết yêu cầu / Tình trạng xe</label>
+                        <textarea id="note" rows="4" placeholder="Mô tả các vấn đề cần kiểm tra hoặc hạng mục bảo dưỡng định kỳ..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Xác Nhận Đăng Ký Lịch Hẹn</button>
+                </form>
+            </div>
+
+            <div>
+                <div class="info-card">
+                    <h4 class="info-card-title">Chính Sách Bảo Hành &amp; Dịch Vụ</h4>
+                    <ul class="info-card-list">
+                        <li>✔️ Bảo hành chính hãng lên đến 3 năm không giới hạn số km.</li>
+                        <li>✔️ Linh kiện và phụ tùng thay thế chính hãng 100%.</li>
+                        <li>✔️ Kiểm tra chẩn đoán lỗi chuyên sâu bằng thiết bị chính hãng.</li>
+                        <li>✔️ Dịch vụ hỗ trợ khẩn cấp 24h miễn phí.</li>
+                    </ul>
+                </div>
+
+                <div class="info-card" style="text-align: center; border-left: 4px solid var(--primary);">
+                    <h4 class="info-card-title" style="border: none; margin-bottom: 0.5rem;">Hotline Dịch Vụ</h4>
+                    <p style="font-size: 1.8rem; font-weight: 700; color: #121212; margin: 0.5rem 0;">1800 400110</p>
+                    <p style="font-size: 0.8rem; color: #666666; margin: 0;">Liên hệ kỹ thuật viên hỗ trợ nhanh</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        let selectedType = 'bảo hành';
+
+        document.querySelectorAll('.type-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                document.querySelectorAll('.type-option').forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                selectedType = opt.dataset.type;
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Đặt ngày hẹn tối thiểu là ngày hôm nay
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                let mm = today.getMonth() + 1; 
+                let dd = today.getDate();
+                if (dd < 10) dd = '0' + dd;
+                if (mm < 10) mm = '0' + mm;
+                dateInput.min = yyyy + '-' + mm + '-' + dd;
+            }
+
+            const user = API.getCurrentUser();
+            if (!user) {
+                alert('Vui lòng đăng nhập để sử dụng dịch vụ bảo hành.');
+                window.location.href = '/login';
+                return;
+            }
+        });
+
+        document.getElementById('warranty-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = API.getCurrentUser();
+            
+            const selectedDate = document.getElementById('date').value;
+            const dateInput = document.getElementById('date');
+            
+            if (selectedDate < dateInput.min) {
+                alert('Lỗi: Bạn không thể đặt lịch vào một ngày trong quá khứ. Vui lòng chọn lại ngày khác!');
+                return;
+            }
+
+            const bookingData = {
+                userId: user._id,
+                type: selectedType,
+                date: selectedDate,
+                timeSlot: document.getElementById('timeslot').value,
+                note: `Xe: ${document.getElementById('vehicle-info').value}. Chi tiết: ${document.getElementById('note').value}`
+            };
+
+            try {
+                const res = await API.createBooking(bookingData);
+                if (res.error) {
+                    alert(res.error);
+                } else {
+                    alert('Yêu cầu của bạn đã được tiếp nhận! Kỹ thuật viên sẽ liên hệ lại để xác nhận lịch hẹn.');
+                    window.location.href = '/profile';
+                }
+            } catch (err) {
+                alert('Lỗi khi gửi yêu cầu đặt lịch.');
+            }
+        });
+    </script>
+</body>
+</html>

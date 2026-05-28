@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+
+<h1>CHƯƠNG 2: PHÂN TÍCH, THIẾT KẾ VÀ ĐẶC TẢ YÊU CẦU HỆ THỐNG</h1>
+
+<h2>2.1. Phân tích các tác nhân và quy trình nghiệp vụ</h2>
+<p>Hệ thống website Showroom Mercedes-Benz Cao Cấp được thiết kế để phục vụ quy trình vận hành toàn diện của một đại lý ô tô trực tuyến hạng sang, hướng đến đối tượng khách hàng có nhu cầu tham khảo, đăng ký lái thử và đặt cọc xe trực tuyến. Quy trình nghiệp vụ được xây dựng dựa trên sự tương tác khép kín giữa ba tác nhân chính bao gồm: Khách hàng, Nhân viên và Quản trị viên. Đảm bảo mọi luồng dữ liệu từ khi tiếp cận đến khi hoàn tất đơn đặt cọc đều được xử lý minh bạch và chính xác qua backend Node.js.</p>
+
+<h3>2.1.1. Quy trình nghiệp vụ của tác nhân Khách hàng</h3>
+<p>Quy trình bắt đầu khi khách hàng truy cập vào giao diện trang chủ với thiết kế Glassmorphism hiện đại và sang trọng. Tại đây, khách hàng có thể chiêm ngưỡng ngay phần hiển thị tiêu đề các mẫu xe mới nhất nằm ngay dưới mục bộ sưu tập xe. Khách hàng thực hiện nghiệp vụ xem chi tiết sản phẩm, so sánh các tính năng nội/ngoại thất, màu sắc và thông số kỹ thuật. Đặc biệt, danh mục "Xe đã qua sử dụng" đã được loại bỏ để tập trung hoàn toàn vào các dòng xe mới, cao cấp nhất.</p>
+<p>Nếu hài lòng, khách hàng tiến hành chọn xe và bước vào quy trình thanh toán đặt cọc. Tại trang Thanh toán (Checkout) mang phong cách Dark Mode Glassmorphism, nền mờ tối sang trọng làm nổi bật thông tin xe, khách hàng cung cấp thông tin liên hệ và lựa chọn phương thức thanh toán chuyển khoản với mã VietQR tự động. Ngoài ra, khách hàng có thể đặt lịch hẹn tư vấn và theo dõi mọi hoạt động trong trang Hồ sơ cá nhân (Profile) được thiết kế hiện đại, tinh tế.</p>
+
+<h3>2.1.2. Quy trình nghiệp vụ của tác nhân Nhân viên</h3>
+<p>Nhân viên đóng vai trò trung gian trong việc vận hành và chăm sóc khách hàng. Quy trình nghiệp vụ bắt đầu bằng việc đăng nhập vào hệ thống. Tại bảng điều khiển của nhân viên, họ tiếp nhận danh sách các yêu cầu đặt cọc xe mới phát sinh và quản lý lịch hẹn lái thử (Booking). Nhân viên sẽ kiểm tra thời gian, xác nhận lịch tư vấn và cập nhật trạng thái trên hệ thống. Nhân viên không có quyền can thiệp vào các danh mục xe hay thay đổi cấu trúc hệ thống, giúp đảm bảo tính an toàn dữ liệu.</p>
+
+<h3>2.1.3. Quy trình nghiệp vụ của tác nhân Quản trị viên</h3>
+<p>Quản trị viên (Admin) nắm giữ quyền hạn cao nhất. Quy trình chính bao gồm quản trị danh mục xe (CRUD), cập nhật thông tin mô tả, điều chỉnh giá bán và số lượng trong cơ sở dữ liệu MongoDB. Quản trị viên giám sát hệ thống đặt cọc, tổng doanh thu và quản lý tài khoản nhân viên. Mọi hoạt động được bảo mật qua JWT và giao diện điều hành chuyên nghiệp.</p>
+
+<h2>2.2. Phân tích và đặc tả giao diện (UI/UX) cao cấp</h2>
+<p>Để xứng tầm với thương hiệu Mercedes-Benz, giao diện người dùng được nâng cấp và thiết kế lại toàn bộ với phong cách hiện đại nhất:</p>
+<ul>
+    <li><strong>Chủ đề Dark Mode Glassmorphism:</strong> Hệ thống sử dụng màu nền đen sâu (Midnight Black) kết hợp với các dải màu gradient vàng gold. Các khối nội dung, sidebar và modal đều được phủ lớp nền mờ (backdrop-filter) với độ trong suốt 60% (rgba), mang lại cảm giác chiều sâu, bóng bẩy và sang trọng như kính xe ô tô.</li>
+    <li><strong>Toast Notifications mượt mà:</strong> Khắc phục nhược điểm của các hộp thoại cảnh báo (alert) cứng nhắc mặc định của trình duyệt, hệ thống đã tích hợp các thông báo Toast Notification tự động trượt xuống từ góc màn hình. Khi đăng nhập thành công hay sai mật khẩu, các thông báo này sẽ hiển thị với viền đỏ/xanh tinh tế cùng biểu tượng tương ứng, hỗ trợ dịch lỗi chuẩn xác sang tiếng Việt.</li>
+    <li><strong>Trải nghiệm trang Thanh toán (Checkout) và Cá nhân (Profile):</strong> Trang thanh toán được đồng bộ với giao diện Dark Mode Glassmorphism, giúp các ô nhập liệu nền đen mờ kết hợp chữ trắng hiển thị cực kỳ sắc nét và nổi bật. Tương tự, trang Cá nhân cũng được "thay áo mới" với các nút bấm tương tác mượt mà, viền bo tròn mềm mại và hiệu ứng hover phản hồi ngay lập tức.</li>
+    <li><strong>Tối ưu hóa luồng hiển thị:</strong> Phần hiển thị text "Đang tải danh sách..." không thẩm mỹ đã được xóa bỏ hoàn toàn. Bên cạnh đó, việc bố trí lại tiêu đề "Các mẫu mới" ngay sát dưới mục Bộ sưu tập xe giúp điều hướng sự tập trung của khách hàng tốt hơn.</li>
+</ul>
+
+<h2>2.3. Thiết kế kiến trúc Backend nguyên bản</h2>
+<p>Khác biệt hoàn toàn với các dự án thông thường, hệ thống backend của Showroom Mercedes-Benz được viết bằng Node.js với module HTTP thuần (nguyên bản), hoàn toàn không phụ thuộc vào framework Express.js. Điều này thể hiện tư duy lập trình cốt lõi, khả năng làm chủ cấu trúc định tuyến (Router), xử lý luồng (Stream) và phục vụ tập tin tĩnh (Static files).</p>
+<p>Hệ thống tự xây dựng bộ định tuyến trung tâm để rẽ nhánh các HTTP Request. Quá trình xử lý dữ liệu và xác thực được bảo vệ nghiêm ngặt bằng chuẩn JSON Web Token (JWT), mọi thông tin trao đổi được mã hóa giúp bảo vệ an toàn tối đa cho giao dịch đặt cọc hàng tỷ đồng của khách hàng.</p>
+
+<h2>2.4. Thiết kế Cơ sở dữ liệu NoSQL (MongoDB)</h2>
+<p>Do đặc thù các sản phẩm ô tô có nhiều thông số kỹ thuật đa dạng (động cơ, mã lực, mô-men xoắn), việc sử dụng MongoDB giúp tối ưu hóa cấu trúc lưu trữ linh hoạt dạng tài liệu (Document). Hệ thống bao gồm 4 collections chính:</p>
+<ul>
+    <li><strong>users:</strong> Lưu trữ thông tin khách hàng, nhân viên, quản trị viên kèm mật khẩu mã hóa bcryptjs.</li>
+    <li><strong>products:</strong> Thông tin danh mục xe Mercedes-Benz (Tên, giá, thông số, trạng thái).</li>
+    <li><strong>orders:</strong> Quản lý các đơn đặt cọc xe qua VietQR, lưu lịch sử giao dịch.</li>
+    <li><strong>bookings:</strong> Quản lý thông tin đăng ký lịch lái thử xe của khách hàng.</li>
+</ul>
+<p>Đặc biệt, hệ thống ứng dụng toán tử <strong>$inc</strong> của MongoDB trong luồng xử lý đơn hàng, giúp trừ trực tiếp số lượng xe khả dụng ngay trên cơ sở dữ liệu mà không cần thông qua các vòng lặp phía máy chủ, đảm bảo tính toàn vẹn dữ liệu cực kỳ an toàn trong môi trường cạnh tranh thao tác (Race condition).</p>
+
+
+<h1>CHƯƠNG 3: CÀI ĐẶT, ĐÁNH GIÁ VÀ KẾT LUẬN</h1>
+
+<h2>3.1. Tổng quan kết quả cài đặt và kiểm thử</h2>
+<p>Dự án "Xây dựng Website Showroom Ô tô Mercedes-Benz Cao Cấp" đã hoàn thành đầy đủ các chỉ tiêu đề ra cả về chức năng nghiệp vụ lẫn thẩm mỹ giao diện. Hệ thống vận hành ổn định trên môi trường Node.js thuần, phản hồi cực kỳ nhanh chóng và kết nối đồng bộ thành công với MongoDB.</p>
+<p>Quá trình kiểm thử cho thấy toàn bộ luồng quy trình từ khi khách hàng lựa chọn mẫu xe, đăng nhập, thanh toán đặt cọc qua mã VietQR tự động, cho đến khi nhân viên xác nhận lịch hẹn đều diễn ra khép kín, chính xác và không xuất hiện độ trễ (latency).</p>
+
+<h2>3.2. Đánh giá những cải tiến nổi bật của hệ thống</h2>
+<p>So với nguyên bản dự kiến, phiên bản hiện tại đã được nâng cấp mạnh mẽ dựa trên sự thấu hiểu hành vi khách hàng cao cấp:</p>
+<ul>
+    <li><strong>Đồng bộ hóa giao diện Glassmorphism:</strong> Sự chuyển đổi từ giao diện sáng/thông thường sang phong cách kính mờ trên nền tối (Dark Mode) xuyên suốt từ Menu, Trang chủ, Trang Thanh toán đến Trang Cá nhân đã mang lại diện mạo đẳng cấp, xứng tầm một Showroom xe sang. Tình trạng lỗi chữ trắng trên nền trắng ở trang Checkout đã được giải quyết triệt để nhờ thiết kế Dark Mode này.</li>
+    <li><strong>Nâng cấp trải nghiệm tương tác:</strong> Việc áp dụng Toast Notification báo lỗi tiếng Việt chuẩn xác thay thế cho các alert mặc định đã xóa bỏ cảm giác gián đoạn, làm cho website trở nên cực kỳ thân thiện và chuyên nghiệp.</li>
+    <li><strong>Tối ưu hóa hành trình khách hàng:</strong> Sự thay đổi tinh tế như đặt tiêu đề xe mới vào vị trí vàng, loại bỏ các text tải trang thừa thãi hay tinh gọn menu bằng cách bỏ mục xe cũ đã minh chứng cho tư duy tập trung vào các dòng xe chiến lược của thương hiệu.</li>
+</ul>
+
+<h2>3.3. Hạn chế và hướng phát triển</h2>
+<p><strong>Hạn chế:</strong> Do giới hạn về thời gian, hệ thống chưa tích hợp được các cổng thanh toán quốc tế như thẻ tín dụng Visa/Mastercard mà mới dừng lại ở cổng chuyển khoản tự động qua VietQR. Trợ lý ảo AI Chatbot hiện tại chỉ hoạt động tối ưu trên môi trường máy chủ cục bộ (localhost).</p>
+<p><strong>Hướng phát triển:</strong> Trong tương lai, dự án sẽ mở rộng thêm tính năng cho phép khách hàng tuỳ biến (Build/Customize) cấu hình xe trực tuyến (như chọn màu sơn ngoại thất, màu da nội thất, gói trang bị AMG) với khả năng hiển thị 3D xoay 360 độ. Ngoài ra, việc phát triển ứng dụng di động (Mobile App) liên kết trực tiếp với dữ liệu website sẽ được tiến hành nhằm nâng cao khả năng tiếp cận khách hàng trên nền tảng di động.</p>
+
+<h2>3.4. Kết luận chung</h2>
+<p>Bài tập lớn đã hoàn thành xuất sắc mục tiêu số hóa quy trình kinh doanh của một đại lý ô tô Mercedes-Benz cao cấp. Thông qua việc tự tay xây dựng từ cấu trúc máy chủ nguyên bản Node.js, thao tác với CSDL MongoDB cho đến việc tỉ mỉ tùy chỉnh các hiệu ứng UI/UX Glassmorphism hiện đại, đồ án đã khẳng định được năng lực ứng dụng công nghệ thông tin vào việc giải quyết bài toán kinh doanh thực tiễn. Website không chỉ là một kênh bán hàng mà còn là một tác phẩm số hoàn thiện, mang lại ấn tượng thị giác sâu sắc và trải nghiệm liền mạch cho người dùng cao cấp.</p>
+
+</body>
+</html>

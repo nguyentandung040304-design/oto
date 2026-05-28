@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bộ Sưu Tập | Mercedes-Benz Việt Nam</title>
+    <meta name="description" content="Khám phá bộ sưu tập xe Mercedes-Benz chính hãng Việt Nam.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ── PAGE LAYOUT ── */
+        .collection-page {
+            padding-top: 70px;
+            min-height: 100vh;
+            background: var(--bg-dark);
+        }
+
+        /* ── HERO BANNER ── */
+        .collection-hero {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 4rem 6%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+        .collection-hero-left .eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+        }
+        .collection-hero-left h1 {
+            font-size: clamp(1.8rem, 3vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-white);
+            margin-bottom: 0.5rem;
+        }
+        .collection-hero-left p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        .collection-search {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--border);
+            background: var(--bg-dark);
+        }
+        .collection-search input {
+            background: none;
+            border: none;
+            color: var(--text-white);
+            padding: 0.85rem 1.2rem;
+            font-size: 0.88rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            width: 260px;
+        }
+        .collection-search input::placeholder { color: var(--text-subtle); }
+        .collection-search button {
+            background: var(--text-white);
+            border: none;
+            color: var(--bg-dark);
+            padding: 0.85rem 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        .collection-search button:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border);
+            padding: 0 6%;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .filter-bar::-webkit-scrollbar { display: none; }
+        .filter-btn {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .filter-btn:hover { color: var(--text-white); }
+        .filter-btn.active {
+            color: var(--text-white);
+            font-weight: 700;
+        }
+        .filter-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+        .filter-bar-divider {
+            width: 1px;
+            height: 20px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+
+        /* ── FILTER SIDEBAR + GRID ── */
+        .collection-body {
+            display: flex;
+            min-height: 600px;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--bg-dark);
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+        .filter-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: var(--bg-dark);
+            border-right: 1px solid var(--border);
+            padding: 2.5rem 1.5rem;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+        .filter-group {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2rem;
+        }
+        .filter-group:last-child { border-bottom: none; }
+        .filter-group-label {
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        .filter-group select,
+        .filter-group input[type="number"] {
+            width: 100%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-white);
+            padding: 0.7rem 0.8rem;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+            border-radius: 0;
+        }
+        .filter-group select:focus,
+        .filter-group input[type="number"]:focus {
+            border-color: var(--primary);
+        }
+        .filter-group select option { background: var(--bg-card); color: var(--text-white); }
+        .apply-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--text-white);
+            color: var(--bg-dark);
+            border: none;
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+            border-radius: 0;
+        }
+        .apply-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ── CAR GRID ── */
+        .cars-area {
+            flex: 1;
+            padding: 0;
+            background: var(--bg-dark);
+        }
+        .result-info {
+            padding: 1.2rem 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-dark);
+        }
+        .sort-select {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-white);
+            font-size: 0.78rem;
+            font-family: 'Inter', sans-serif;
+            padding: 0.4rem 0.8rem;
+            outline: none;
+            cursor: pointer;
+            border-radius: 0;
+        }
+        .sort-select option { background: var(--bg-card); color: var(--text-white); }
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1px;
+            background: var(--border);
+        }
+        .car-card {
+            background: var(--bg-card);
+            text-decoration: none;
+            color: var(--text-white);
+            display: flex;
+            flex-direction: column;
+            padding: 2.5rem 2rem 2rem;
+            transition: background 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+        .car-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s;
+        }
+        .car-card:hover { background: var(--border); }
+        .car-card:hover::after { transform: scaleX(1); }
+        .car-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+        }
+        .car-card:hover img { transform: scale(1.04); }
+        .car-brand {
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-subtle);
+            margin-bottom: 0.4rem;
+        }
+        .car-name {
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-white);
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+            line-height: 1.3;
+        }
+        .car-specs {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .car-price {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        .car-cta {
+            font-size: 0.75rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: auto;
+            transition: gap 0.2s;
+        }
+        .car-card:hover .car-cta { gap: 0.6rem; }
+        .car-cta::after { content: '›'; font-size: 1.1rem; }
+
+        .no-results {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            background: var(--bg-dark);
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <div class="collection-page">
+        <!-- Hero Banner -->
+        <div class="collection-hero">
+            <div class="collection-hero-left">
+                <p class="eyebrow">Showroom · Mercedes-Benz Việt Nam</p>
+                <h1 style="margin-bottom: 0.2rem;">Bộ sưu tập xe</h1>
+                <h2 id="collection-subtitle" style="font-size: 1.1rem; font-weight: 500; color: var(--primary); text-transform: uppercase; margin-bottom: 1rem; letter-spacing: 1px; display: none;"></h2>
+
+            </div>
+            <div class="collection-search">
+                <input type="text" id="search-input" placeholder="Tìm tên xe, hãng...">
+                <button onclick="applyFilters()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Filter Bar -->
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="quickFilter('all', this)">Tất cả</button>
+            <div class="filter-bar-divider"></div>
+            <button class="filter-btn" onclick="quickFilter('Sedan', this)">Sedan</button>
+            <button class="filter-btn" onclick="quickFilter('SUV', this)">SUV</button>
+            <button class="filter-btn" onclick="quickFilter('Coupe', this)">Coupé</button>
+            <button class="filter-btn" onclick="quickFilter('Cabriolet', this)">Mui trần</button>
+            <button class="filter-btn" onclick="quickFilter('Van', this)">MPV</button>
+            <div class="filter-bar-divider"></div>
+            <button class="filter-btn" onclick="quickFilter('Mercedes-Benz', this)">Mercedes-Benz</button>
+            <button class="filter-btn" onclick="quickFilter('AMG', this)">Mercedes-AMG</button>
+            <button class="filter-btn" onclick="quickFilter('Maybach', this)">Mercedes-Maybach</button>
+            <button class="filter-btn" onclick="quickFilter('EQ', this)">Mercedes-EQ</button>
+        </div>
+
+        <!-- Body: Sidebar + Grid -->
+        <div class="collection-body">
+            <!-- Sidebar Filters -->
+            <aside class="filter-sidebar">
+                <div class="filter-group">
+                    <div class="filter-group-label">Phân hiệu</div>
+                    <select id="filter-brand">
+                        <option value="">Tất cả phân hiệu</option>
+                        <option value="Mercedes-Benz">Mercedes-Benz</option>
+                        <option value="Mercedes-AMG">Mercedes-AMG</option>
+                        <option value="Mercedes-Maybach">Mercedes-Maybach</option>
+                        <option value="Mercedes-EQ">Mercedes-EQ</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-group-label">Kiểu dáng</div>
+                    <select id="filter-type">
+                        <option value="">Tất cả kiểu dáng</option>
+                        <option value="Sedan">Sedan</option>
+                        <option value="SUV">SUV</option>
+                        <option value="Coupe">Coupé</option>
+                        <option value="Cabriolet">Mui trần</option>
+                        <option value="Van">MPV / Xe đa dụng</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-group-label">Nhiên liệu</div>
+                    <select id="filter-fuel">
+                        <option value="">Tất cả</option>
+                        <option value="xăng">Xăng</option>
+                        <option value="điện">Điện</option>
+                        <option value="hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <div class="filter-group-label">Giá tối đa (VNĐ)</div>
+                    <input type="number" id="filter-max-price" placeholder="Ví dụ: 5000000000">
+                </div>
+                <button class="apply-btn" onclick="applyFilters()">Áp dụng</button>
+            </aside>
+
+            <!-- Cars Area -->
+            <main class="cars-area">
+                <div class="result-info">
+                    <span id="result-count"></span>
+                    <select class="sort-select" id="sort-select" onchange="sortCars()">
+                        <option value="default">Sắp xếp mặc định</option>
+                        <option value="price-asc">Giá: Thấp đến cao</option>
+                        <option value="price-desc">Giá: Cao đến thấp</option>
+                        <option value="name-asc">Tên: A → Z</option>
+                    </select>
+                </div>
+                <div class="car-grid" id="collection-grid">
+                    <!-- JS populated -->
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Floating Compare Widget -->
+    <div id="compare-widget" style="position: fixed; bottom: 2rem; right: 2rem; z-index: 1000; display: none; transition: all 0.3s ease;">
+        <a href="/compare" style="background: #121212; color: #ffffff; padding: 1rem 1.8rem; text-decoration: none; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; border: 1px solid var(--primary); display: flex; align-items: center; gap: 0.8rem; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+            <span>So sánh xe</span>
+            <span id="compare-widget-count" style="background: var(--primary); color: #000000; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">0</span>
+        </a>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        let allCars = [];
+        let filteredCars = [];
+
+        async function loadCollection() {
+            try {
+                allCars = await API.getVehicles();
+                filteredCars = [...allCars];
+                
+                // Parse URL parameters
+                const params = new URLSearchParams(window.location.search);
+                const typeParam = params.get('type');
+                const brandParam = params.get('brand');
+                const fuelParam = params.get('fuel');
+                const searchParam = params.get('search');
+                
+                const subtitleEl = document.getElementById('collection-subtitle');
+                if (searchParam === '2024') {
+                    subtitleEl.textContent = 'Các mẫu mới';
+                    subtitleEl.style.display = 'block';
+                } else if (fuelParam === 'điện') {
+                    subtitleEl.textContent = 'Mẫu xe điện';
+                    subtitleEl.style.display = 'block';
+                } else if (fuelParam === 'hybrid') {
+                    subtitleEl.textContent = 'Mẫu xe hybrid cắm sạc';
+                    subtitleEl.style.display = 'block';
+                }
+                
+                if (typeParam) {
+                    const select = document.getElementById('filter-type');
+                    if (select) select.value = typeParam;
+                }
+                if (brandParam) {
+                    const select = document.getElementById('filter-brand');
+                    if (select) select.value = brandParam;
+                }
+                if (fuelParam) {
+                    const select = document.getElementById('filter-fuel');
+                    if (select) select.value = fuelParam;
+                }
+                if (searchParam) {
+                    const searchInput = document.getElementById('search-input');
+                    if (searchInput) searchInput.value = searchParam;
+                }
+                
+                applyFilters();
+            } catch (e) {
+                document.getElementById('collection-grid').innerHTML = '<div class="no-results">Không thể tải dữ liệu. Vui lòng thử lại.</div>';
+            }
+        }
+
+        function renderCars(list) {
+            const grid = document.getElementById('collection-grid');
+            document.getElementById('result-count').innerHTML = `<span class="count-num">${list.length}</span> <span class="count-text">xe được tìm thấy</span>`;
+            if (!list.length) {
+                grid.innerHTML = '<div class="no-results">Không tìm thấy xe phù hợp</div>';
+                return;
+            }
+            grid.innerHTML = list.map(c => `
+                <div class="car-card" style="position: relative;">
+                    <button onclick="toggleCompare('${c._id}', event)" style="position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.85); border: 1px solid var(--border); padding: 0.3rem 0.6rem; font-size: 0.68rem; letter-spacing: 0.5px; cursor: pointer; transition: 0.2s; z-index: 10;" id="compare-btn-${c._id}">
+                        + So sánh
+                    </button>
+                    <a href="/product-detail?id=${c._id}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
+                        <div class="car-brand">${c.brand || 'Mercedes-Benz'}</div>
+                        <img src="${c.images && c.images[0] ? c.images[0] : '/images/xe1.jpg'}" alt="${c.name}" loading="lazy">
+                        <div class="car-name">${c.name}</div>
+                        <div class="car-specs">${c.year || '2024'} · ${c.fuel || 'Xăng'} · ${new Intl.NumberFormat('vi-VN').format(c.mileage || 0)} km</div>
+                        <div class="car-price">${new Intl.NumberFormat('vi-VN').format(c.price)} <span style="font-size:0.75rem;font-weight:400;color:#666666;">VNĐ</span></div>
+                        <div class="car-cta">Khám phá thêm</div>
+                    </a>
+                </div>
+            `).join('');
+            updateCompareButtons();
+        }
+
+        function applyFilters() {
+            const brand = document.getElementById('filter-brand').value;
+            const type = document.getElementById('filter-type').value;
+            const fuel = document.getElementById('filter-fuel').value;
+            const maxPrice = document.getElementById('filter-max-price').value;
+            const search = document.getElementById('search-input').value.toLowerCase();
+
+            filteredCars = allCars.filter(c => {
+                if (brand && !(c.brand || '').toLowerCase().includes(brand.toLowerCase())) return false;
+                if (type && !(c.type || '').toLowerCase().includes(type.toLowerCase())) return false;
+                if (fuel && !(c.fuel || '').toLowerCase().includes(fuel.toLowerCase())) return false;
+                if (maxPrice && c.price > Number(maxPrice)) return false;
+                if (search && !(c.name || '').toLowerCase().includes(search) && !(c.brand || '').toLowerCase().includes(search)) return false;
+                return true;
+            });
+            sortCars();
+        }
+
+        function quickFilter(cat, el) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            if (cat === 'all') { filteredCars = [...allCars]; }
+            else {
+                filteredCars = allCars.filter(c =>
+                    (c.brand||'').toLowerCase().includes(cat.toLowerCase()) ||
+                    (c.type||'').toLowerCase().includes(cat.toLowerCase()) ||
+                    (c.name||'').toLowerCase().includes(cat.toLowerCase()) ||
+                    (cat === 'EQ' && ((c.brand||'').toLowerCase().includes('eq') || (c.fuel||'').toLowerCase().includes('điện')))
+                );
+            }
+            renderCars(filteredCars);
+        }
+
+        function sortCars() {
+            const sort = document.getElementById('sort-select').value;
+            let sorted = [...filteredCars];
+            if (sort === 'price-asc') sorted.sort((a,b) => a.price - b.price);
+            else if (sort === 'price-desc') sorted.sort((a,b) => b.price - a.price);
+            else if (sort === 'name-asc') sorted.sort((a,b) => (a.name||'').localeCompare(b.name||''));
+            renderCars(sorted);
+        }
+
+        document.getElementById('search-input').addEventListener('keyup', e => {
+            if (e.key === 'Enter') applyFilters();
+        });
+
+        function toggleCompare(id, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            let list = JSON.parse(localStorage.getItem('compareList') || '[]');
+            const idx = list.indexOf(id);
+            if (idx > -1) {
+                list.splice(idx, 1);
+            } else {
+                if (list.length >= 3) {
+                    alert('Chỉ có thể so sánh tối đa 3 xe cùng lúc!');
+                    return;
+                }
+                list.push(id);
+            }
+            localStorage.setItem('compareList', JSON.stringify(list));
+            updateCompareButtons();
+        }
+
+        function updateCompareButtons() {
+            const list = JSON.parse(localStorage.getItem('compareList') || '[]');
+            allCars.forEach(c => {
+                const btn = document.getElementById(`compare-btn-${c._id}`);
+                if (btn) {
+                    if (list.includes(c._id)) {
+                        btn.textContent = '✓ Đã chọn';
+                        btn.style.borderColor = 'var(--primary)';
+                        btn.style.color = 'var(--primary)';
+                        btn.style.background = '#ffffff';
+                    } else {
+                        btn.textContent = '+ So sánh';
+                        btn.style.borderColor = 'var(--border)';
+                        btn.style.color = '#666666';
+                        btn.style.background = 'rgba(255,255,255,0.85)';
+                    }
+                }
+            });
+
+            const widget = document.getElementById('compare-widget');
+            const widgetCount = document.getElementById('compare-widget-count');
+            if (widget && widgetCount) {
+                if (list.length > 0) {
+                    widget.style.display = 'block';
+                    widgetCount.textContent = list.length;
+                } else {
+                    widget.style.display = 'none';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => loadCollection());
+    </script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercedes-Benz Việt Nam | Trang chủ chính thức</title>
+    <meta name="description" content="Chào mừng bạn đến với trang chủ chính thức của Mercedes-Benz Việt Nam. Khám phá các dòng xe Sedan, SUV, Coupé sang trọng và đẳng cấp.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            padding-top: 0 !important;
+        }
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            overflow: hidden;
+            background: #000;
+        }
+        .hero-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.75;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 6% 7rem;
+            max-width: 700px;
+        }
+        .hero-eyebrow {
+            font-size: 0.78rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+        }
+        .hero-title {
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            font-weight: 300;
+            line-height: 1.1;
+            color: #fff;
+            letter-spacing: 0.5px;
+            margin-bottom: 2.5rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .hero-btn-primary {
+            background: #fff;
+            color: #000;
+            padding: 0.9rem 2.2rem;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.88rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: 0.25s;
+            border: 1px solid #fff;
+        }
+        .hero-btn-primary:hover { background: #e0e0e0; }
+        .hero-btn-outline {
+            background: transparent;
+            color: #fff;
+            padding: 0.9rem 2.2rem;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 0.88rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.7);
+            transition: 0.25s;
+        }
+        .hero-btn-outline:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ── NEW BRAND SWITCHER ── */
+        .brand-switcher-container {
+            position: relative;
+            z-index: 10;
+            margin-top: -30px; /* Pull up to overlap the bottom of hero */
+            height: 60px;
+            display: flex;
+            justify-content: center;
+        }
+        .brand-switcher-box {
+            display: flex;
+            width: 90%;
+            max-width: 800px;
+            height: 60px;
+            border: 1px solid #b0b0b0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            overflow: hidden;
+            background-color: #000;
+        }
+        .brand-switch-tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            height: 100%;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .brand-switch-tab.mb-tab {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: clamp(0.9rem, 2.5vw, 1.2rem);
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .brand-switch-tab.mb-tab:hover {
+            opacity: 0.9;
+        }
+        .brand-switch-tab.amg-tab {
+            background-color: #ffffff;
+            color: #000000;
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .brand-switch-tab.amg-tab:hover {
+            background-color: #f7f7f7;
+        }
+        .brand-switch-tab.amg-tab .amg-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+        }
+        .brand-switch-tab.amg-tab .amg-stripes {
+            letter-spacing: -2px;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: #000;
+            margin-right: 6px;
+            opacity: 0.85;
+        }
+        .brand-switch-tab.amg-tab .amg-text {
+            letter-spacing: -0.5px;
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: #000;
+        }
+        .brand-switch-tab.maybach-tab {
+            background-color: #e5e5e5;
+            color: #000000;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            letter-spacing: clamp(2px, 0.8vw, 5px);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            text-transform: uppercase;
+        }
+        .brand-switch-tab.maybach-tab:hover {
+            background-color: #dadada;
+        }
+        .brand-switch-tab.eq-tab {
+            background-color: #000000;
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            letter-spacing: clamp(1px, 0.5vw, 3px);
+            font-size: clamp(0.7rem, 2vw, 0.9rem);
+            text-transform: uppercase;
+        }
+        .brand-switch-tab.eq-tab:hover {
+            background-color: #222222;
+        }
+
+        /* ── QUICK ACCESS ── */
+        .quick-bar {
+            background: var(--bg-dark);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            margin-top: -30px; /* Pull the quick-bar up to meet the hero's bottom */
+            padding-top: 3.5rem; /* Add spacing so it doesn't overlap the brand switcher */
+        }
+        .quick-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 3rem;
+            text-decoration: none;
+            color: var(--text-white);
+            background: var(--bg-card);
+            font-size: 0.82rem;
+            letter-spacing: 0.8px;
+            gap: 0.8rem;
+            border-right: 1px solid var(--border);
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+        }
+        .quick-item:first-child { border-left: 1px solid var(--border); }
+        .quick-item:hover { color: var(--primary); background: var(--border); }
+        .quick-item svg {
+            width: 24px; height: 24px;
+            fill: currentColor;
+            opacity: 0.9;
+        }
+
+        /* ── MODELS SECTION ── */
+        .models-section {
+            background: #ffffff;
+            padding: 5rem 6%;
+        }
+        .section-label {
+            text-align: center;
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            font-weight: 500;
+        }
+        .section-title {
+            text-align: center;
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #121212;
+            margin-bottom: 3rem;
+        }
+
+        /* ── CATEGORY TABS ── */
+        .cat-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            margin-bottom: 3.5rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .cat-tab {
+            padding: 0.9rem 1.8rem;
+            color: #666666;
+            cursor: pointer;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            transition: 0.2s;
+            font-weight: 400;
+            border: none;
+            background: none;
+        }
+        .cat-tab:hover { color: #000000; }
+        .cat-tab.active {
+            color: #121212;
+            font-weight: 500;
+        }
+        .cat-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px; left: 0; right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        /* ── CAR GRID ── */
+        .car-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .car-card {
+            background: #ffffff;
+            text-decoration: none;
+            color: #121212;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            transition: all 0.25s ease;
+            border: 1px solid #e5e5e5;
+            position: relative;
+            overflow: hidden;
+        }
+        .car-card:hover {
+            border-color: #999999;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .car-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 1.5rem;
+            transition: transform 0.5s cubic-bezier(0.2,0.8,0.2,1);
+        }
+        .car-card:hover img { transform: scale(1.04); }
+        .car-card-brand {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 0.4rem;
+        }
+        .car-card-name {
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #121212;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            line-height: 1.3;
+        }
+        .car-card-price {
+            font-size: 0.85rem;
+            color: #444444;
+            margin-bottom: 1.5rem;
+        }
+        .car-card-cta {
+            font-size: 0.78rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: auto;
+        }
+        .car-card-cta::after {
+            content: '›';
+            font-size: 1.1rem;
+            transition: transform 0.2s;
+        }
+        .car-card:hover .car-card-cta::after { transform: translateX(4px); }
+
+        .models-footer {
+            text-align: center;
+            margin-top: 3.5rem;
+        }
+        .models-more {
+            display: inline-block;
+            padding: 0.9rem 3rem;
+            border: 1px solid #121212;
+            color: #121212;
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.25s ease;
+        }
+        .models-more:hover {
+            background: #121212;
+            color: #ffffff;
+        }
+
+        /* ── STORY SECTION ── */
+        .story-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 480px;
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .story-img {
+            background-size: cover;
+            background-position: center;
+        }
+        .story-text {
+            background: #f9f9f9;
+            padding: 6rem 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-left: 1px solid #e5e5e5;
+        }
+        .story-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .story-title {
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-weight: 300;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #121212;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .story-body {
+            color: #555555;
+            line-height: 1.8;
+            font-size: 0.92rem;
+            margin-bottom: 2.5rem;
+        }
+        .story-link {
+            display: inline-block;
+            padding: 0.9rem 2.2rem;
+            background: #121212;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            align-self: flex-start;
+        }
+        .story-link:hover { background: #333333; }
+
+        /* ── SERVICES BAR ── */
+        .services-bar {
+            background: #ffffff;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .service-item {
+            padding: 3.5rem 3rem;
+            border-right: 1px solid #e5e5e5;
+            text-decoration: none;
+            color: #121212;
+            transition: all 0.25s ease;
+        }
+        .service-item:last-child { border-right: none; }
+        .service-item:hover { background: #f9f9f9; }
+        .service-num {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-weight: 500;
+        }
+        .service-title {
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #121212;
+            margin-bottom: 0.8rem;
+        }
+        .service-desc {
+            font-size: 0.85rem;
+            color: #555555;
+            line-height: 1.6;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="mb-header"></header>
+
+    <!-- ── HERO ── -->
+    <section class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="/video/homepage-stage-video-models-portfolio.mp4" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <p class="hero-eyebrow">Mercedes-Benz Việt Nam · Sự Sang Trọng Đích Thực</p>
+            <h1 class="hero-title">Chào mừng kỷ niệm<br>140 năm tiên phong.</h1>
+            <div class="hero-btns">
+                <a href="/collection" class="hero-btn-primary">Khám phá bộ sưu tập</a>
+                <a href="/about" class="hero-btn-outline">Câu chuyện thương hiệu</a>
+            </div>
+        </div>
+
+    </section>
+
+    <hr class="m-stripe-divider">
+
+    <div class="brand-switcher-container">
+        <div class="brand-switcher-box">
+            <a href="/collection?brand=Mercedes-Benz" class="brand-switch-tab mb-tab">
+                Mercedes-Benz
+            </a>
+            <a href="/collection?brand=Mercedes-AMG" class="brand-switch-tab amg-tab">
+                <span class="amg-logo">
+                    <span class="amg-stripes">/////</span>
+                    <span class="amg-text">AMG</span>
+                </span>
+            </a>
+            <a href="/collection?brand=Mercedes-Maybach" class="brand-switch-tab maybach-tab">
+                MAYBACH
+            </a>
+            <a href="/collection?brand=Mercedes-EQ" class="brand-switch-tab eq-tab">
+                MERCEDES-EQ
+            </a>
+        </div>
+    </div>
+
+    <!-- ── QUICK ACCESS ── -->
+    <nav class="quick-bar">
+        <a href="/collection" class="quick-item">
+            <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 12H3v-4h8v4zm10-6H3V8h18v4z"/></svg>
+            Tìm xe có sẵn
+        </a>
+        <a href="/booking" class="quick-item">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5C3.9 3 3 3.9 3 5L3 19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+            Đặt lịch lái thử
+        </a>
+        <a href="/contact" class="quick-item">
+            <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.3C.5 6.7.9 9.8 2.9 11.8c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.6z"/></svg>
+            Liên hệ showroom
+        </a>
+        <a href="/contact#showroom-locator" class="quick-item">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Tìm showroom
+        </a>
+        <a href="/collection" class="quick-item">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            Bảng giá & Brochure
+        </a>
+    </nav>
+
+    <!-- ── MODELS ── -->
+    <section class="models-section">
+        <p class="section-label">Dòng xe nổi bật</p>
+        <h2 class="section-title">Khám phá các mẫu xe</h2>
+
+        <div class="cat-tabs">
+            <button class="cat-tab active" onclick="filterCars('all', this)">Tất cả</button>
+            <button class="cat-tab" onclick="filterCars('Sedan', this)">Sedan</button>
+            <button class="cat-tab" onclick="filterCars('SUV', this)">SUV</button>
+            <button class="cat-tab" onclick="filterCars('Coupe', this)">Coupé</button>
+            <button class="cat-tab" onclick="filterCars('Electric', this)">Điện</button>
+        </div>
+
+        <div class="car-grid" id="car-grid">
+            <!-- JS populated -->
+        </div>
+
+        <div class="models-footer">
+            <a href="/collection" class="models-more">Xem tất cả các dòng xe</a>
+        </div>
+    </section>
+
+    <!-- ── STORY ── -->
+    <section class="story-section">
+        <div class="story-img"></div>
+        <div class="story-text">
+            <p class="story-eyebrow">Di sản & Công nghệ</p>
+            <h2 class="story-title">Vị thế<br>vượt thời gian</h2>
+            <p class="story-body">Khám phá di sản công nghệ và nghệ thuật chế tác đỉnh cao. Mỗi chiếc xe không chỉ là phương tiện di chuyển — đó là biểu tượng của sự sang trọng, đẳng cấp và tiên phong. Hãy để chúng tôi đồng hành cùng bạn.</p>
+            <a href="/about" class="story-link">Tìm hiểu thêm</a>
+        </div>
+    </section>
+
+
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        let allCars = [];
+
+        async function loadCars() {
+            try {
+                allCars = await API.getVehicles();
+                renderCars(allCars.slice(0, 8));
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderCars(list) {
+            const grid = document.getElementById('car-grid');
+            grid.style.opacity = 0;
+            grid.innerHTML = list.map(c => `
+                <a href="/product-detail?id=${c._id}" class="car-card">
+                    <div class="car-card-brand">${c.brand || 'Mercedes-Benz'}</div>
+                    <img src="${c.images && c.images[0] ? c.images[0] : '/images/xe1.jpg'}" alt="${c.name}" loading="lazy">
+                    <div class="car-card-name">${c.name}</div>
+                    <div class="car-card-price"><span class="price-prefix">Từ</span> ${new Intl.NumberFormat('vi-VN').format(c.price)} VNĐ</div>
+                    <div class="car-card-cta">Khám phá thêm</div>
+                </a>
+            `).join('');
+            requestAnimationFrame(() => {
+                grid.style.transition = 'opacity 0.4s ease';
+                grid.style.opacity = 1;
+            });
+        }
+
+        function filterCars(cat, el) {
+            document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+            const filtered = cat === 'all'
+                ? allCars
+                : allCars.filter(c =>
+                    (c.type || '').toLowerCase().includes(cat.toLowerCase()) ||
+                    (c.name || '').toLowerCase().includes(cat.toLowerCase()) ||
+                    (c.fuel || '').toLowerCase().includes(cat === 'Electric' ? 'điện' : cat.toLowerCase())
+                  );
+            renderCars((filtered.length ? filtered : allCars).slice(0, 8));
+        }
+
+        // Intersection observer fade-in
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = 1;
+                    e.target.style.transform = 'translateY(0)';
+                    obs.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCars();
+            document.querySelectorAll('.story-section, .services-bar, .models-section').forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(24px)';
+                el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+                obs.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>

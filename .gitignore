@@ -1,0 +1,7 @@
+node_modules/
+backups/
+.env
+check_users.js
+backup_db.js
+*.log
+.system_generated/

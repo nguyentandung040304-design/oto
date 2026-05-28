@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Đơn Hàng | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <h2>MERCEDES-BENZ ADMIN</h2>
+            <nav>
+                <a href="/admin/dashboard">Tổng Quan</a>
+                <a href="/admin/products">Quản Lý Xe</a>
+                <a href="/admin/orders" class="active">Đơn Hàng</a>
+                <a href="/admin/bookings">Lịch Hẹn</a>
+                <a href="/admin/users">Quản Lý Người Dùng</a>
+                <a href="/admin/contacts">Lời Nhắn</a>
+                <a href="/" style="margin-top: 5rem;">Thoát</a>
+            </nav>
+        </aside>
+        <main class="main-content" style="padding: 0;">
+            <header style="background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); width: 100%;">
+                <div style="color: var(--primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem;">Quản lý đơn hàng</div>
+            </header>
+            
+            <div style="padding: 3rem 5%;">
+                <h1 style="font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 2rem;">Danh Sách Đặt Cọc</h1>
+            
+            <div class="admin-card">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Ngày đặt</th>
+                            <th>Khách hàng</th>
+                            <th>Siêu xe</th>
+                            <th>Số tiền cọc</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="order-list"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <footer></footer>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script>
+        async function loadOrders() {
+            const res = await fetch('/api/orders');
+            const orders = await res.json();
+            const list = document.getElementById('order-list');
+            list.innerHTML = '';
+            
+            orders.forEach(o => {
+                const date = new Date(o.createdAt).toLocaleDateString('vi-VN');
+                const statusClass = o.status === 'confirmed' ? 'status-confirmed' : 'status-pending';
+                const statusText = o.status === 'confirmed' ? 'Đã duyệt' : 'Chờ xử lý';
+
+                list.innerHTML += `
+                    <tr>
+                        <td>${date}</td>
+                        <td>
+                            <strong>${o.customerName}</strong><br>
+                            <span style="font-size: 0.8rem; color: #666;">${o.customerEmail}</span>
+                        </td>
+                        <td>${o.vehicleName}</td>
+                        <td style="color: var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.depositAmount)} đ</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <div style="display: flex; gap: 0.8rem; align-items: center;">
+                                ${o.status === 'pending' ? `
+                                    <button onclick="updateOrderStatus('${o._id}', 'confirmed')" style="background: rgba(193, 163, 95, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: var(--transition);" onmouseover="this.style.background='var(--primary)'; this.style.color='black'" onmouseout="this.style.background='rgba(193, 163, 95, 0.1)'; this.style.color='var(--primary)'">DUYỆT</button>
+                                ` : ''}
+                                <button onclick="deleteOrder('${o._id}')" style="background: rgba(255, 77, 77, 0.05); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: var(--transition);" onmouseover="this.style.background='#ff4d4d'; this.style.color='white'" onmouseout="this.style.background='rgba(255, 77, 77, 0.05)'; this.style.color='#ff4d4d'">XÓA</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function updateOrderStatus(id, status) {
+            const res = await fetch(`/api/orders/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status })
+            });
+            if (res.ok) loadOrders();
+        }
+
+        async function deleteOrder(id) {
+            if (confirm('Xóa đơn hàng này khỏi hệ thống?')) {
+                const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+                if (res.ok) loadOrders();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+</html>

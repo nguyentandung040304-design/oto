@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Nhận Đặt Cọc | Mercedes-Benz Việt Nam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #000000;
+        }
+        .checkout-container { 
+            max-width: 1000px; 
+            margin: 6rem auto; 
+            display: grid; 
+            grid-template-columns: 1fr 350px; 
+            gap: 2rem; 
+        }
+        .checkout-form, .order-summary { 
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 3rem 2.5rem; 
+            border-radius: 16px; 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            color: #ffffff;
+        }
+        .checkout-form h2, .order-summary h3 {
+            color: var(--primary) !important;
+            margin-bottom: 2rem;
+        }
+        .form-group { 
+            margin-bottom: 1.5rem; 
+        }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 0.6rem; 
+            color: #aaaaaa !important; 
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select { 
+            width: 100%; 
+            padding: 1rem; 
+            background: rgba(0,0,0,0.5) !important; 
+            border: 1px solid rgba(255,255,255,0.1) !important; 
+            color: #ffffff !important; 
+            border-radius: 8px; 
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary) !important;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <div class="checkout-container">
+        <div class="checkout-form">
+            <h2>Thông Tin Đặt Cọc</h2>
+            <form id="checkout-form" style="margin-top: 2rem;">
+                <div class="form-group">
+                    <label>Họ và Tên</label>
+                    <input type="text" id="cust-name" required>
+                </div>
+                <div class="form-group">
+                    <label>Số Điện Thoại</label>
+                    <input type="tel" id="cust-phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Địa Chỉ Nhận Xe (Dự kiến)</label>
+                    <input type="text" id="cust-address" required>
+                </div>
+                <div class="form-group">
+                    <label>Phương Thức Thanh Toán Đặt Cọc</label>
+                    <select id="payment-method">
+                        <option value="Chuyển khoản ngân hàng">Chuyển khoản ngân hàng</option>
+                        <option value="Thanh toán tại showroom">Thanh toán tại showroom</option>
+                        <option value="Ví điện tử (Momo/ZaloPay)">Ví điện tử (Momo/ZaloPay)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.1rem; border-radius: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 1rem; border: none; background: var(--primary); color: #000; cursor: pointer; transition: 0.3s;" onmouseover="this.style.boxShadow='0 4px 15px rgba(212, 175, 55, 0.4)'; this.style.transform='translateY(-2px)'" onmouseout="this.style.boxShadow='none'; this.style.transform='translateY(0)'">Xác Nhận Đặt Cọc</button>
+            </form>
+        </div>
+
+        <aside class="order-summary">
+            <h3>Tóm tắt đơn hàng</h3>
+            <div id="vehicle-preview" style="margin: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem;">
+                <p style="color: #aaaaaa;">Đang tải thông tin xe...</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; align-items: baseline; color: #dddddd;">
+                <span>Giá niêm yết:</span>
+                <span id="list-price" style="font-family: 'Inter', sans-serif; font-weight: 500;">0đ</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--primary); font-size: 1.2rem; margin-top: 1.5rem; align-items: baseline; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem;">
+                <span style="color: #ffffff;">Số tiền đặt cọc (10%):</span>
+                <span id="deposit-amount" style="font-family: 'Inter', sans-serif; font-weight: 800;">0đ</span>
+            </div>
+            <p style="font-size: 0.85rem; color: #888888; margin-top: 2rem; line-height: 1.5;">* Sau khi đặt cọc thành công, nhân viên tư vấn sẽ liên hệ với bạn trong vòng 24h.</p>
+        </aside>
+    </div>
+
+    <!-- Payment QR Modal -->
+    <div id="payment-qr-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); z-index: 10000; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease;">
+        <div style="background: #ffffff; width: 100%; max-width: 550px; border: 1px solid var(--border); box-shadow: 0 25px 50px rgba(0,0,0,0.15); display: flex; flex-direction: column; overflow: hidden; font-family: 'Inter', sans-serif;">
+            
+            <!-- Modal Header -->
+            <div style="background: #121212; color: #ffffff; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <svg viewBox="0 0 100 100" width="28" height="28">
+                        <circle cx="50" cy="50" r="47" fill="none" stroke="white" stroke-width="3"/>
+                        <circle cx="50" cy="50" r="41" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+                        <polygon points="50,8 46,50 54,50" fill="white" opacity="0.95"/>
+                        <polygon points="50,8 54,50 57,44" fill="rgba(255,255,255,0.5)" opacity="0.8"/>
+                        <polygon points="84,70 50,50 50,55" fill="white" opacity="0.95"/>
+                        <polygon points="84,70 50,50 55,47" fill="rgba(255,255,255,0.5)" opacity="0.8"/>
+                        <polygon points="16,70 50,50 50,55" fill="white" opacity="0.95"/>
+                        <polygon points="16,70 50,50 45,47" fill="rgba(255,255,255,0.5)" opacity="0.8"/>
+                    </svg>
+                    <span style="font-weight: 600; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;">Cổng Thanh Toán Đặt Cọc</span>
+                </div>
+                <button onclick="closeQRModal()" style="background: none; border: none; color: #ffffff; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div style="padding: 2.5rem 2rem; overflow-y: auto; text-align: center; max-height: 80vh;">
+                <p style="color: #121212; font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem;">Vui lòng quét mã VietQR dưới đây để thanh toán đặt cọc</p>
+                <p style="color: #666666; font-size: 0.82rem; margin-bottom: 2rem;">Hệ thống sẽ tự động cập nhật trạng thái đặt cọc sau khi nhận được khoản thanh toán.</p>
+                
+                <!-- QR Code Container -->
+                <div style="display: inline-block; background: #ffffff; padding: 1.5rem; border: 1px solid var(--border); margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative;">
+                    <img id="payment-qr-img" src="" alt="Mã QR Thanh Toán" style="width: 260px; height: 260px; display: block; object-fit: contain;">
+                    <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <span style="background: #e6f4ea; color: #137333; font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.6rem; border-radius: 50px; display: flex; align-items: center; gap: 0.3rem;">
+                            <span style="display: inline-block; width: 6px; height: 6px; background: #137333; border-radius: 50%;"></span> VietQR Chuẩn Napas247
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Transfer details table -->
+                <div style="text-align: left; background: #f8f9fa; border: 1px solid var(--border); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 2rem; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem;">
+                        <span style="color: #666666;">Ngân hàng thụ hưởng:</span>
+                        <strong style="color: #121212;">Vietcombank (VCB)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem;">
+                        <span style="color: #666666;">Số tài khoản:</span>
+                        <strong style="color: #121212; display: flex; align-items: center; gap: 0.5rem;">
+                            <span>0961408888</span>
+                            <button onclick="copyText('0961408888', this)" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.75rem; font-weight: 600;">Sao chép</button>
+                        </strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem;">
+                        <span style="color: #666666;">Tên người thụ hưởng:</span>
+                        <strong style="color: #121212;">MERCEDES BENZ VIETNAM</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px dashed var(--border); padding-bottom: 0.6rem;">
+                        <span style="color: #666666;">Số tiền đặt cọc (10%):</span>
+                        <strong style="color: var(--primary); font-size: 1rem;" id="qr-modal-amount">0đ</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="color: #666666;">Nội dung chuyển khoản:</span>
+                        <strong style="color: #121212; display: flex; align-items: center; gap: 0.5rem;">
+                            <span id="qr-modal-content">DATCOCXE</span>
+                            <button onclick="copyText(document.getElementById('qr-modal-content').textContent, this)" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.75rem; font-weight: 600;">Sao chép</button>
+                        </strong>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <button onclick="confirmPaymentAndRedirect()" class="btn-gold" style="width: 100%; padding: 1rem; font-size: 0.85rem; font-weight: 700; letter-spacing: 1.5px; border-radius: 0; cursor: pointer; background: #121212; color: #ffffff; border: 1px solid #121212; transition: 0.2s;" onmouseover="this.style.background='#333333'" onmouseout="this.style.background='#121212'">Xác nhận đã chuyển khoản</button>
+                <button onclick="closeQRModal()" style="width: 100%; padding: 0.8rem; font-size: 0.8rem; font-weight: 500; border-radius: 0; cursor: pointer; background: none; border: none; color: #666666; text-decoration: underline; margin-top: 0.8rem;">Hủy giao dịch (Đóng popup)</button>
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        let currentVehicle = null;
+        let pendingOrderData = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = API.getCurrentUser();
+            if (!user) {
+                alert('Vui lòng đăng nhập để thực hiện đặt cọc');
+                window.location.href = '/login';
+                return;
+            }
+            document.getElementById('cust-name').value = user.name;
+            document.getElementById('cust-phone').value = user.phone || '';
+
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('vehicleId');
+            if (id) {
+                currentVehicle = await API.getVehicle(id);
+                document.getElementById('vehicle-preview').innerHTML = `
+                    <img src="${currentVehicle.images[0]}" style="width: 100%; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                    <h4 style="color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin-bottom: 0.3rem;">${currentVehicle.brand}</h4>
+                    <p style="font-weight: 500; font-size: 1.1rem; color: #ffffff;">${currentVehicle.name}</p>
+                `;
+                document.getElementById('list-price').textContent = new Intl.NumberFormat('vi-VN').format(currentVehicle.price) + 'đ';
+                document.getElementById('deposit-amount').textContent = new Intl.NumberFormat('vi-VN').format(currentVehicle.price * 0.1) + 'đ';
+            }
+        });
+
+        document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!currentVehicle) return;
+
+            const depositAmount = Math.round(currentVehicle.price * 0.1);
+            pendingOrderData = {
+                userId: API.getCurrentUser()._id,
+                items: [{ vehicleId: currentVehicle._id, name: currentVehicle.name, price: currentVehicle.price, qty: 1 }],
+                deposit: depositAmount,
+                total: currentVehicle.price,
+                address: document.getElementById('cust-address').value,
+                paymentMethod: document.getElementById('payment-method').value,
+                note: 'Khách đặt cọc online'
+            };
+
+            if (pendingOrderData.paymentMethod === 'Thanh toán tại showroom') {
+                const res = await API.createOrder(pendingOrderData);
+                if (res.error) {
+                    alert(res.error);
+                } else {
+                    alert('Cảm ơn bạn đã đặt cọc! Nhân viên tư vấn sẽ liên hệ với bạn trong vòng 24h để hoàn tất thủ tục tại showroom.');
+                    window.location.href = '/profile';
+                }
+                return;
+            }
+
+            // Show QR payment modal for transfer
+            const orderCode = Math.random().toString(36).substring(2, 8).toUpperCase();
+            const cleanCarName = currentVehicle.name.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10);
+            const description = `DAT COC XE ${cleanCarName} MD${orderCode}`;
+            
+            // Set modal fields
+            document.getElementById('qr-modal-amount').textContent = new Intl.NumberFormat('vi-VN').format(depositAmount) + 'đ';
+            document.getElementById('qr-modal-content').textContent = description;
+            
+            // VietQR API endpoint
+            const qrUrl = `https://img.vietqr.io/image/vcb-0961408888-qr_only.png?amount=${depositAmount}&addInfo=${encodeURIComponent(description)}&accountName=MERCEDES%20BENZ%20VIETNAM`;
+            document.getElementById('payment-qr-img').src = qrUrl;
+            
+            // Open modal
+            const modal = document.getElementById('payment-qr-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.style.opacity = '1';
+            }, 50);
+        });
+
+        function copyText(text, btn) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Đã sao chép!';
+                btn.style.color = '#137333';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.color = 'var(--primary)';
+                }, 2000);
+            });
+        }
+
+        function closeQRModal() {
+            const modal = document.getElementById('payment-qr-modal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        async function confirmPaymentAndRedirect() {
+            if (!pendingOrderData) return;
+            const res = await API.createOrder(pendingOrderData);
+            if (res.error) {
+                alert(res.error);
+                return;
+            }
+            alert('Cảm ơn bạn đã gửi thanh toán đặt cọc! Mercedes-Benz Việt Nam sẽ xử lý giao dịch và phản hồi trong 24h.');
+            window.location.href = '/profile';
+        }
+    </script>
+</body>
+</html>

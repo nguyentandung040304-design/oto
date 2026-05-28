@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Ký Tài Khoản | Mercedes-Benz Việt Nam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 5rem 2rem;
+            background: #000;
+            background-image: url('https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=1600');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+        }
+        .auth-card {
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 4rem 3rem;
+            border-radius: 2px;
+            border: 1px solid rgba(255,255,255,0.08);
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            color: #ffffff;
+            padding: 0.5rem 0;
+            border-radius: 0;
+            font-size: 1.1rem;
+            font-family: 'Inter', sans-serif;
+            transition: 0.3s ease;
+        }
+        .form-group select {
+            color: rgba(255,255,255,0.8);
+            background: rgba(15, 15, 15, 0.95); /* Better dropdown contrast */
+        }
+        .form-group input::placeholder {
+            color: rgba(255,255,255,0.2);
+            font-size: 0.95rem;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-bottom-color: var(--primary);
+            background: transparent;
+        }
+
+        .eye-icon {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            cursor: pointer;
+            color: rgba(255,255,255,0.4);
+            user-select: none;
+        }
+        .eye-icon:hover { color: #fff; }
+        
+        /* Password Checklist */
+        .pwd-checklist {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            font-size: 0.85rem;
+        }
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: rgba(255,255,255,0.4);
+            transition: 0.3s;
+        }
+        .check-item.valid {
+            color: #4CAF50;
+        }
+        .check-icon {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1.5px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        
+        .terms-checkbox {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        .terms-checkbox input {
+            margin-top: 0.3rem;
+            accent-color: var(--primary);
+            transform: scale(1.3);
+            cursor: pointer;
+        }
+        .btn-full {
+            width: 100%;
+            padding: 1.1rem;
+            margin-top: 1rem;
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .btn-full:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header></header>
+ 
+    <div class="auth-container">
+        <div class="auth-card">
+            <h2 style="margin-bottom: 2.5rem; text-align: center; font-family: 'Inter', sans-serif; font-weight: 300; font-size: 1.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-white);">
+                Tạo tài khoản mới <span style="font-size: 1.2rem; color: var(--primary); cursor: help;" title="Thông tin chi tiết về việc tạo tài khoản">❓</span>
+            </h2>
+            
+            <form id="register-form">
+                <div class="form-group">
+                    <label>Địa chỉ Email *</label>
+                    <input type="email" id="email" required placeholder="nguyentandung.040304@gmail.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Mật khẩu *</label>
+                    <input type="password" id="password" required placeholder="•••••••••••••">
+                    <span class="eye-icon" onclick="togglePwd('password')">👁️</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu *</label>
+                    <input type="password" id="confirm_password" required placeholder="•••••••••••••">
+                    <span class="eye-icon" onclick="togglePwd('confirm_password')">👁️</span>
+                </div>
+ 
+                <div class="pwd-checklist">
+                    <div class="check-item" id="req-length"><span class="check-icon">✓</span> Tối thiểu 10 ký tự</div>
+                    <div class="check-item" id="req-num"><span class="check-icon">✓</span> Tối thiểu 1 số</div>
+                    <div class="check-item" id="req-upper"><span class="check-icon">✓</span> Tối thiểu 1 chữ cái viết hoa</div>
+                    <div class="check-item" id="req-spec"><span class="check-icon">✓</span> Tối thiểu 1 ký tự đặc biệt</div>
+                    <div class="check-item" id="req-lower"><span class="check-icon">✓</span> Tối thiểu 1 chữ cái thường</div>
+                    <div class="check-item valid" id="req-valid"><span class="check-icon">✓</span> Không có ký tự nào không hợp lệ</div>
+                </div>
+ 
+                <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 2rem; line-height: 1.6;">
+                    Thông tin đăng nhập đã nhập là bắt buộc để đăng nhập vào tài khoản của bạn. Chúng tôi sẽ gửi mã xác nhận đến địa chỉ email đã chỉ định để phục vụ mục đích xác minh.
+                </p>
+ 
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label>Tên *</label>
+                        <input type="text" id="firstname" required placeholder="Dũng">
+                    </div>
+                    <div class="form-group">
+                        <label>Họ *</label>
+                        <input type="text" id="lastname" required placeholder="Nguyễn">
+                    </div>
+                </div>
+ 
+                <div class="form-group" style="margin-bottom: 2.5rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; color: var(--text-muted);">
+                        <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></span>
+                        <span style="font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px;">Tùy chọn khu vực</span>
+                        <span style="flex: 1; height: 1px; background: rgba(255,255,255,0.1);"></span>
+                    </div>
+                    <select id="region" style="margin-top: 1.5rem; cursor: pointer;">
+                        <option value="VN">🌐 Việt Nam (Vietnam)</option>
+                        <option value="GLOBAL">🌐 Quốc Tế (Global)</option>
+                    </select>
+                </div>
+ 
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms" style="font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.6;">
+                        <span style="color: #ffffff; font-weight: 500;">Tôi đồng ý với các điều khoản sau *</span><br><br>
+                        <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 600;">Điều khoản sử dụng Mercedes-Benz ID</a><br><br>
+                        Bạn có thể tìm thấy thông tin xử lý dữ liệu của dữ liệu Mercedes-Benz ID trong<br>
+                        <a href="#" style="color: var(--primary); text-decoration: none; font-weight: 600;">Chính sách quyền riêng tư Mercedes-Benz ID</a>
+                    </label>
+                </div>
+ 
+                <p style="font-size: 0.8rem; color: #888888; margin-bottom: 1.5rem;">* Ô bắt buộc</p>
+ 
+                <button type="submit" class="btn-full" style="width: 100%; padding: 1.2rem; border-radius: 0; font-weight: 600; font-size: 1rem; border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px;">Tạo tài khoản mới</button>
+            </form>
+            
+            <p style="text-align: right; margin-top: 2rem; color: #666666; font-size: 0.95rem;">
+                Mercedes-Benz ID đã có sẵn? <a href="/login" style="color: var(--primary); text-decoration: none; font-weight: 600;">Đăng nhập</a>
+            </p>
+        </div>
+    </div>
+ 
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        function togglePwd(id) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+
+        const pwdInput = document.getElementById('password');
+        const reqLength = document.getElementById('req-length');
+        const reqNum = document.getElementById('req-num');
+        const reqUpper = document.getElementById('req-upper');
+        const reqSpec = document.getElementById('req-spec');
+        const reqLower = document.getElementById('req-lower');
+
+        pwdInput.addEventListener('input', () => {
+            const v = pwdInput.value;
+            
+            if (v.length >= 10) reqLength.classList.add('valid'); else reqLength.classList.remove('valid');
+            if (/[0-9]/.test(v)) reqNum.classList.add('valid'); else reqNum.classList.remove('valid');
+            if (/[A-Z]/.test(v)) reqUpper.classList.add('valid'); else reqUpper.classList.remove('valid');
+            if (/[a-z]/.test(v)) reqLower.classList.add('valid'); else reqLower.classList.remove('valid');
+            if (/[^A-Za-z0-9]/.test(v)) reqSpec.classList.add('valid'); else reqSpec.classList.remove('valid');
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const pwd = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+
+            if (pwd !== confirm) {
+                alert('Mật khẩu xác nhận không khớp!');
+                return;
+            }
+
+            // Check if all requirements met
+            const isValidPwd = pwd.length >= 10 && /[0-9]/.test(pwd) && /[A-Z]/.test(pwd) && /[a-z]/.test(pwd) && /[^A-Za-z0-9]/.test(pwd);
+            if (!isValidPwd) {
+                alert('Vui lòng đảm bảo mật khẩu đáp ứng đủ các điều kiện bảo mật được liệt kê bên dưới.');
+                return;
+            }
+
+            const firstname = document.getElementById('firstname').value;
+            const lastname = document.getElementById('lastname').value;
+            
+            const userData = {
+                name: `${lastname} ${firstname}`.trim(),
+                email: document.getElementById('email').value,
+                phone: '', // Optional in new schema layout
+                address: '', // Optional
+                password: pwd,
+                role: 'customer'
+            };
+
+            try {
+                const res = await API.register(userData);
+                if (res.error) {
+                    alert(res.error);
+                } else {
+                    alert('Đăng ký thành công! Hãy kiểm tra email để xác nhận. Chuyển hướng đến đăng nhập...');
+                    window.location.href = '/login';
+                }
+            } catch (err) {
+                alert('Lỗi kết nối server');
+            }
+        });
+    </script>
+</body>
+</html>

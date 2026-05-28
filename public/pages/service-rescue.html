@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hỗ Trợ & Cứu Hộ 24h | Mercedes-Benz Việt Nam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #ffffff;
+            color: #121212;
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-section {
+            background: url('../images/xe6.jpg') center/cover no-repeat;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .services-layout {
+            padding: 5rem 8% 5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .service-img-wrapper {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+        .service-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .service-img-wrapper:hover .service-img {
+            transform: scale(1.05);
+        }
+        .service-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #121212;
+            letter-spacing: 1px;
+        }
+        .service-desc {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        .service-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #121212;
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .service-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Hỗ Trợ & Cứu Hộ 24h</h1>
+        </div>
+    </div>
+
+    <main class="services-layout">
+        <div class="service-block">
+            <div class="service-img-wrapper">
+                <img src="../images/xe3.jpg" alt="Dịch vụ hỗ trợ & cứu hộ 24h" class="service-img">
+            </div>
+            <div>
+                <h2 class="service-title">An Tâm Trên Mọi Hành Trình</h2>
+                <p class="service-desc">Sự an tâm trên mọi cung đường. Bất kể ngày đêm, khi chiếc xe của bạn gặp sự cố, dịch vụ cứu hộ khẩn cấp 24/7 của Mercedes-Benz luôn sẵn sàng hỗ trợ. Kéo xe miễn phí về xưởng gần nhất, cung cấp xe thay thế tạm thời và hỗ trợ giải quyết sự cố ngay tại chỗ.</p>
+                <p class="service-desc">Đường dây nóng hoạt động liên tục 24 giờ một ngày, 7 ngày một tuần, sẵn sàng lắng nghe và điều phối các giải pháp tốt nhất để bạn có thể tiếp tục hành trình một cách trọn vẹn nhất.</p>
+                <a href="/contact" class="service-btn">Liên Hệ Khẩn Cấp</a>
+            </div>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+</body>
+</html>

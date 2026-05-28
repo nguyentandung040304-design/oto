@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt Lịch Lái Thử | Mercedes-Benz Việt Nam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: var(--bg-dark);
+            color: var(--text-white);
+        }
+        .booking-container {
+            max-width: 600px;
+            margin: 8rem auto 6rem auto;
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #aaa;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            background: var(--bg-dark) !important;
+            border: 1px solid var(--border) !important;
+            color: var(--text-white) !important;
+            padding: 0.85rem;
+            border-radius: 0;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary) !important;
+        }
+
+    </style>
+</head>
+<body>
+    <header></header>
+
+    <div class="booking-container">
+        <h2 style="margin-bottom: 2rem;">Đăng Ký Lái Thử</h2>
+        <form id="booking-form">
+            <div class="form-group">
+                <label>Chọn Xe</label>
+                <select id="vehicle-id" required>
+                    <option value="">-- Chọn dòng xe --</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ngày Hẹn</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label>Khung Giờ</label>
+                <select id="timeslot" required>
+                    <option value="08:00 - 10:00">08:00 - 10:00</option>
+                    <option value="10:00 - 12:00">10:00 - 12:00</option>
+                    <option value="14:00 - 16:00">14:00 - 16:00</option>
+                    <option value="16:00 - 18:00">16:00 - 18:00</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Ghi chú thêm</label>
+                <textarea id="note" rows="3" placeholder="Yêu cầu đặc biệt..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Xác Nhận Đăng Ký</button>
+        </form>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = API.getCurrentUser();
+            if (!user) {
+                alert('Vui lòng đăng nhập để đặt lịch lái thử');
+                window.location.href = '/login';
+                return;
+            }
+
+            // Populate vehicle list
+            try {
+                const vehicles = await API.getVehicles();
+                const select = document.getElementById('vehicle-id');
+                const params = new URLSearchParams(window.location.search);
+                const preselected = params.get('vehicleId');
+
+                vehicles.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v._id;
+                    opt.textContent = `${v.brand} ${v.name}`;
+                    if (v._id === preselected) opt.selected = true;
+                    select.appendChild(opt);
+                });
+            } catch (e) {
+                console.error(e);
+            }
+
+            // Set min date for the date picker to today
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date();
+                // Format to YYYY-MM-DD
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dateInput.setAttribute('min', `${yyyy}-${mm}-${dd}`);
+            }
+        });
+
+        document.getElementById('booking-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = API.getCurrentUser();
+            
+            const selectedDate = document.getElementById('date').value;
+            const dateInput = document.getElementById('date');
+            
+            if (selectedDate < dateInput.getAttribute('min')) {
+                alert('Lỗi: Bạn không thể đặt lịch vào một ngày trong quá khứ. Vui lòng chọn lại ngày khác!');
+                return;
+            }
+
+            const bookingData = {
+                userId: user._id,
+                vehicleIds: [document.getElementById('vehicle-id').value],
+                type: 'lái thử',
+                date: selectedDate,
+                timeSlot: document.getElementById('timeslot').value,
+                note: document.getElementById('note').value
+            };
+
+            try {
+                const res = await API.createBooking(bookingData);
+                if (res.error) {
+                    alert(res.error);
+                } else {
+                    alert('Đăng ký lái thử thành công! Nhân viên sẽ liên hệ với bạn sớm nhất.');
+                    window.location.href = '/';
+                }
+            } catch (err) {
+                alert('Lỗi khi gửi yêu cầu.');
+            }
+        });
+    </script>
+</body>
+</html>

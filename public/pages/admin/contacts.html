@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Lời Nhắn Khách Hàng | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <h2>MERCEDES-BENZ ADMIN</h2>
+            <nav>
+                <a href="/admin/dashboard">Tổng Quan</a>
+                <a href="/admin/products">Quản Lý Xe</a>
+                <a href="/admin/orders">Đơn Hàng</a>
+                <a href="/admin/bookings">Lịch Hẹn</a>
+                <a href="/admin/users">Quản Lý Người Dùng</a>
+                <a href="/admin/contacts" class="active">Lời Nhắn</a>
+                <a href="/" style="margin-top: 5rem;">Thoát</a>
+            </nav>
+        </aside>
+        <main class="main-content" style="padding: 0;">
+            <header style="background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); width: 100%;">
+                <div style="color: var(--primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem;">Quản lý lời nhắn</div>
+            </header>
+            
+            <div style="padding: 3rem 5%;">
+                <h1 style="font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 2rem;">Lời Nhắn Hỗ Trợ</h1>
+            
+            <div id="contact-list-container">
+                <!-- Contact cards will be here -->
+            </div>
+        </main>
+    </div>
+    <footer></footer>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script>
+        async function loadContacts() {
+            const res = await fetch('/api/contacts');
+            const contacts = await res.json();
+            const container = document.getElementById('contact-list-container');
+            container.innerHTML = '';
+            
+            contacts.forEach(c => {
+                const date = new Date(c.createdAt).toLocaleString('vi-VN');
+                const isReplied = c.status === 'replied';
+                
+                container.innerHTML += `
+                    <div class="admin-card" style="position: relative; border-left: 4px solid ${isReplied ? '#28a745' : 'var(--primary)'};">
+                        <div style="position: absolute; top: 1rem; right: 1rem; display: flex; gap: 1rem; align-items: center;">
+                            <span class="status-badge" style="background: ${isReplied ? 'rgba(40, 167, 69, 0.1)' : 'rgba(193, 163, 95, 0.1)'}; color: ${isReplied ? '#28a745' : 'var(--primary)'};">
+                                ${isReplied ? 'ĐÃ TRẢ LỜI' : 'MỚI'}
+                            </span>
+                            <button onclick="deleteContact('${c._id}')" style="background: rgba(255, 77, 77, 0.05); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.4rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; transition: var(--transition);" onmouseover="this.style.background='#ff4d4d'; this.style.color='white'" onmouseout="this.style.background='rgba(255, 77, 77, 0.05)'; this.style.color='#ff4d4d'">Xóa</button>
+                        </div>
+                        
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">${c.name}</h4>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">${c.email} | ${date}</p>
+                        
+                        <div style="background: var(--bg-dark); padding: 1.5rem; border-radius: 8px; font-style: italic; margin-bottom: 1.5rem; border: 1px solid var(--border); color: var(--text-white);">
+                            "${c.message}"
+                        </div>
+ 
+                        ${isReplied ? `
+                            <div style="background: rgba(40, 167, 69, 0.05); padding: 1.5rem; border-radius: 8px; border: 1px solid rgba(40, 167, 69, 0.2); margin-top: 1rem;">
+                                <p style="color: #28a745; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;">Phản hồi của Admin:</p>
+                                <p style="color: var(--text-white);">${c.reply}</p>
+                            </div>
+                        ` : `
+                            <div id="reply-form-${c._id}" style="margin-top: 1.5rem;">
+                                <textarea id="reply-text-${c._id}" placeholder="Nhập nội dung phản hồi..." style="width: 100%; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); padding: 1rem; border-radius: 10px; min-height: 100px; margin-bottom: 1rem; outline: none;"></textarea>
+                                <button onclick="submitReply('${c._id}')" class="btn-gold" style="padding: 0.6rem 1.5rem; font-size: 0.75rem; border: none; font-weight: 700;">GỬI PHẢN HỒI</button>
+                            </div>
+                        `}
+                    </div>
+                `;
+            });
+        }
+
+        async function submitReply(id) {
+            const reply = document.getElementById(`reply-text-${id}`).value;
+            if (!reply) return alert('Vui lòng nhập nội dung phản hồi');
+
+            try {
+                const res = await fetch(`/api/contacts/${id}/reply`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ reply })
+                });
+
+                if (res.ok) {
+                    alert('Đã gửi phản hồi thành công!');
+                    loadContacts();
+                } else {
+                    alert('Lỗi khi gửi phản hồi');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Lỗi hệ thống');
+            }
+        }
+
+        async function deleteContact(id) {
+            if (confirm('Xóa lời nhắn này?')) {
+                const res = await fetch(`/api/contacts/${id}`, { method: 'DELETE' });
+                if (res.ok) loadContacts();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadContacts);
+    </script>
+</body>
+</html>

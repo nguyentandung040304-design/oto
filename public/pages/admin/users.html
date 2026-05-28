@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Khách Hàng | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <h2>MERCEDES-BENZ ADMIN</h2>
+            <nav>
+                <a href="/admin/dashboard">Tổng Quan</a>
+                <a href="/admin/products">Quản Lý Xe</a>
+                <a href="/admin/orders">Đơn Hàng</a>
+                <a href="/admin/bookings">Lịch Hẹn</a>
+                <a href="/admin/users" class="active">Quản Lý Người Dùng</a>
+                <a href="/admin/contacts">Lời Nhắn</a>
+                <a href="/" class="sidebar-exit">Thoát</a>
+            </nav>
+        </aside>
+        <main class="main-content admin-main-content">
+            <header class="admin-header">
+                <div class="admin-header-title">Quản lý người dùng</div>
+            </header>
+            
+            <div class="admin-page-section">
+                <h1 class="admin-page-title">Quản lý người dùng</h1>
+
+                <div class="admin-card admin-card-add">
+                    <h3 class="admin-section-title">Thêm nhân viên mới</h3>
+                    <form id="add-user-form" class="admin-form-grid" autocomplete="off">
+                        <div class="admin-form-row">
+                            <input id="new-user-name" class="admin-input" placeholder="Họ và tên" required autocomplete="off">
+                            <input id="new-user-email" type="email" class="admin-input" placeholder="Email" required autocomplete="off">
+                        </div>
+                        <div class="admin-form-row">
+                            <input id="new-user-phone" class="admin-input" placeholder="Số điện thoại" autocomplete="off">
+                            <input id="new-user-password" type="password" class="admin-input" placeholder="Mật khẩu" required autocomplete="new-password">
+                        </div>
+                        <div class="admin-role-row">
+                            <label class="admin-form-label" for="new-user-role">Vai trò:</label>
+                            <select id="new-user-role" class="admin-input">
+                                <option value="employee" selected>Nhân viên</option>
+                                <option value="customer">Khách hàng</option>
+                            </select>
+                        </div>
+                        <div class="admin-form-actions">
+                            <button type="button" class="btn-gold btn-inline" onclick="prefillEmployee()">Điền mẫu nhân viên</button>
+                            <button type="submit" class="btn-gold btn-inline">Thêm người dùng</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="admin-card">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Họ và tên</th>
+                                <th>Email</th>
+                                <th>Số điện thoại</th>
+                                <th>Vai trò</th>
+                                <th>Ngày tham gia</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-list"></tbody>
+                    </table>
+                </div>
+        </main>
+    </div>
+    <footer></footer>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script>
+        async function loadUsers() {
+            try {
+                const res = await fetch('/api/users');
+                if (!res.ok) throw new Error('Không thể lấy dữ liệu khách hàng');
+                const users = await res.json();
+                
+                const list = document.getElementById('user-list');
+                list.innerHTML = '';
+                
+                // Hiển thị tất cả trừ Admin
+                const managedUsers = users.filter(u => u.role !== 'admin');
+                
+                if (managedUsers.length === 0) {
+                    list.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">Chưa có khách hàng hoặc nhân viên nào trong hệ thống.</td></tr>';
+                    return;
+                }
+
+                managedUsers.forEach(u => {
+                    const date = new Date(u.createdAt).toLocaleDateString('vi-VN');
+                    list.innerHTML += `
+                        <tr>
+                            <td><strong>${u.name}</strong></td>
+                            <td>${u.email}</td>
+                            <td>${u.phone || 'Chưa cập nhật'}</td>
+                            <td>${u.role === 'employee' ? 'Nhân viên' : 'Khách hàng'}</td>
+                            <td>${date}</td>
+                            <td>
+                                <button onclick="deleteUser('${u._id}')" class="btn-delete">XÓA</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error('Lỗi tải danh sách:', err);
+                document.getElementById('user-list').innerHTML = `<tr><td colspan="5" style="color: #ff4d4d; text-align: center;">Lỗi hệ thống: ${err.message}</td></tr>`;
+            }
+        }
+
+        async function prefillEmployee() {
+            document.getElementById('new-user-name').value = 'Nguyễn Văn A';
+            document.getElementById('new-user-email').value = 'nv.a@example.com';
+            document.getElementById('new-user-phone').value = '0901234567';
+            document.getElementById('new-user-password').value = 'Pass@1234';
+            document.getElementById('new-user-role').value = 'employee';
+        }
+
+        async function addUser(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('new-user-name').value.trim();
+            const email = document.getElementById('new-user-email').value.trim().toLowerCase();
+            const phone = document.getElementById('new-user-phone').value.trim();
+            const password = document.getElementById('new-user-password').value;
+            const role = document.getElementById('new-user-role').value;
+
+            if (!name || !email || !password) {
+                alert('Vui lòng điền đầy đủ tên, email và mật khẩu.');
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, phone, password, role })
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    alert(data.error || 'Không thể tạo người dùng mới.');
+                    return;
+                }
+                alert('Người dùng mới đã được tạo thành công.');
+                document.getElementById('add-user-form').reset();
+                loadUsers();
+            } catch (err) {
+                console.error('Lỗi tạo người dùng:', err);
+                alert('Đã xảy ra lỗi khi tạo người dùng.');
+            }
+        }
+
+        async function deleteUser(id) {
+            if (confirm('Xóa tài khoản này?')) {
+                const res = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+                if (res.ok) loadUsers();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers();
+            document.getElementById('add-user-form').addEventListener('submit', addUser);
+        });
+    </script>
+</body>
+</html>

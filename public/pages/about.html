@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới Thiệu | Mercedes-Benz Việt Nam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #ffffff;
+        }
+        .about-layout {
+            padding: 8rem 8% 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+        .about-title {
+            color: #121212;
+            margin-bottom: 2.5rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 3rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 6rem;
+            align-items: center;
+        }
+        .about-intro-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #121212;
+            font-weight: 400;
+        }
+        .about-body-text {
+            margin-bottom: 1.5rem;
+            color: #555555;
+        }
+        .about-stats {
+            margin-top: 3rem;
+            display: flex;
+            gap: 4rem;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+        .stat-value {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 0.2rem;
+        }
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .about-image-wrapper {
+            position: relative;
+        }
+        .about-image {
+            width: 100%;
+            border-radius: 0;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        .about-badge {
+            position: absolute;
+            bottom: -15px;
+            left: -15px;
+            background: #121212;
+            padding: 1rem 2rem;
+            border-radius: 0;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+
+    <main class="about-layout">
+        <h1 class="about-title">Câu Chuyện Thương Hiệu</h1>
+        <div class="about-grid">
+            <div>
+                <p class="about-intro-text">Khởi nguồn từ di sản lâu đời của sự tiên phong, <strong>Mercedes-Benz</strong> luôn khẳng định vị thế dẫn đầu trong việc định hình tương lai ngành công nghiệp ô tô.</p>
+                <p class="about-body-text">Chúng tôi không chỉ kiến tạo những cỗ máy hoàn hảo kết hợp giữa công nghệ đỉnh cao và sự sang trọng tinh tế, mà còn mang đến trải nghiệm sống đẳng cấp vượt trội dành cho quý khách hàng sở hữu dòng xe ngôi sao ba cánh.</p>
+                <p class="about-body-text">Mỗi sản phẩm Mercedes-Benz bàn giao đều mang sứ mệnh kiến tạo những chuẩn mực mới về thiết kế, sự an toàn và hiệu năng vận hành, đồng hành cùng khát vọng vươn tới sự hoàn mỹ của từng vị chủ nhân.</p>
+                <div class="about-stats">
+                    <div>
+                        <h3 class="stat-value">5000+</h3>
+                        <p class="stat-label">Xe bàn giao tại Việt Nam</p>
+                    </div>
+                    <div>
+                        <h3 class="stat-value">25+</h3>
+                        <p class="stat-label">Năm đồng hành cùng khách hàng</p>
+                    </div>
+                </div>
+            </div>
+            <div class="about-image-wrapper">
+                <img src="../images/xe3.jpg" class="about-image" alt="Mercedes-Benz Heritage">
+                <div class="about-badge">
+                    SINCE 1995
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+</body>
+</html>

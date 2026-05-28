@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Cá Nhân | Mercedes-Benz Việt Nam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .profile-container {
+            max-width: 1000px;
+            margin: 4rem auto;
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 3rem;
+        }
+
+        .sidebar-profile {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: fit-content;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .tab-content {
+            background: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 3.5rem;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .history-item {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-tag {
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+            font-size: 0.8rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+        }
+
+        /* Định dạng lại khu vực tên và email */
+        #user-info h3 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-top: 1rem;
+            letter-spacing: 1px;
+        }
+
+        /* Định dạng các nút bấm trong nav */
+        .sidebar-profile nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Inter', sans-serif;
+            border-radius: 8px;
+        }
+        .nav-item:hover, .nav-item.active {
+            color: var(--primary);
+            background: rgba(212, 175, 55, 0.05);
+        }
+        .nav-item.text-danger {
+            color: #ff4d4d;
+        }
+        .nav-item.text-danger:hover {
+            color: #ff4d4d;
+            background: rgba(255, 77, 77, 0.05);
+        }
+        .form-input {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: white;
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-input[readonly] {
+            color: rgba(255,255,255,0.5);
+            cursor: not-allowed;
+        }
+        .form-label {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Custom Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #333;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+            background-color: white;
+        }
+
+        /* Custom scrollbar for contact history */
+        #contact-history::-webkit-scrollbar {
+            width: 6px;
+        }
+        #contact-history::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        #contact-history::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+        #contact-history::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+
+    <div class="profile-container">
+        <aside class="sidebar-profile">
+            <div id="user-info" style="text-align: center; margin-bottom: 2rem;">
+                <div style="position: relative; width: 100px; height: 100px; margin: 0 auto 1.5rem; cursor: pointer;" onclick="document.getElementById('avatar-input').click()">
+                    <div id="user-initial"
+                        style="width: 100%; height: 100%; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: white; overflow: hidden; border: 1px solid var(--border); transition: var(--transition);">
+                        K
+                    </div>
+                    <div style="position: absolute; bottom: 0; right: 0; background: var(--primary); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid var(--bg-card); font-size: 0.8rem; color: white;">📷</div>
+                </div>
+                <input type="file" id="avatar-input" hidden accept="image/*">
+                <h3 id="user-name-side">Khoai</h3>
+                <p id="user-email-side" style="font-size: 0.75rem; color: var(--primary); font-weight: 600; text-transform: uppercase; margin-top: 0.5rem; letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> QUẢN TRỊ VIÊN</p>
+            </div>
+            <nav>
+                <button onclick="switchTab('account', this)" id="nav-account" class="nav-item active">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    Thông tin tài khoản
+                </button>
+                <button onclick="switchTab('orders', this)" id="nav-orders" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    Đơn hàng của tôi
+                </button>
+                <button onclick="switchTab('bookings', this)" id="nav-bookings" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    Lịch hẹn tư vấn
+                </button>
+                <button onclick="switchTab('warranty', this)" id="nav-warranty" class="nav-item">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Tra cứu bảo hành
+                </button>
+                <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 1rem 0;"></div>
+                <button onclick="API.logout()" class="nav-item text-danger">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Đăng xuất
+                </button>
+            </nav>
+        </aside>
+
+        <main class="tab-content">
+            <div id="account-tab">
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; letter-spacing: 1px;">Thông Tin Tài Khoản</h2>
+                
+                <form id="account-form">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label class="form-label">Họ và tên</label>
+                            <input type="text" id="acc-name" class="form-input" value="">
+                        </div>
+                        <div>
+                            <label class="form-label">Email</label>
+                            <input type="email" id="acc-email" class="form-input" readonly value="">
+                        </div>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="text" id="acc-phone" class="form-input" value="">
+                        </div>
+                        <div>
+                            <label class="form-label">Ngày sinh</label>
+                            <input type="text" id="acc-dob" class="form-input" placeholder="dd/mm/yyyy" style="color-scheme: dark;">
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 2.5rem;">
+                        <label class="form-label">Địa chỉ nhận hàng mặc định</label>
+                        <input type="text" id="acc-address" class="form-input" placeholder="Nhập địa chỉ...">
+                    </div>
+                    
+                    <button type="button" onclick="saveProfile()" class="btn-gold" style="border-radius: 4px; padding: 0.8rem 2rem; font-size: 0.85rem;">LƯU THAY ĐỔI</button>
+                </form>
+
+                <div style="margin-top: 3rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem;">
+                    <h3 style="color: var(--primary); font-size: 1.05rem; margin-bottom: 1.5rem; font-weight: 500;">Đổi mật khẩu</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1.2rem; max-width: 300px;">
+                        <input type="password" id="acc-old-pass" placeholder="Mật khẩu cũ" class="form-input" style="background: #1a1a1a; color: #fff; border: 1px solid #333; font-size: 0.9rem; padding: 0.8rem 1rem;">
+                        <input type="password" id="acc-new-pass" placeholder="Mật khẩu mới (từ 6 ký tự)" class="form-input" style="background: #1a1a1a; color: #fff; border: 1px solid #333; font-size: 0.9rem; padding: 0.8rem 1rem;">
+                        <button type="button" onclick="updatePasswordReal()" style="background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 0.7rem 1.5rem; font-weight: 500; border-radius: 4px; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; transition: 0.3s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000';" onmouseout="this.style.background='transparent'; this.style.color='var(--primary)';">CẬP NHẬT MẬT KHẨU</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="orders-tab" style="display: none;">
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; letter-spacing: 1px;">Đơn Hàng Của Tôi</h2>
+                <div id="order-history" style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px;">
+                    <p style="color: var(--text-muted); margin: 0;">Chưa có đơn hàng nào.</p>
+                </div>
+            </div>
+
+            <div id="bookings-tab" style="display: none;">
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; letter-spacing: 1px;">Lịch Hẹn Tư Vấn</h2>
+                <div id="booking-history" style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px;">
+                    <p style="color: var(--text-muted); margin: 0;">Chưa có lịch hẹn nào.</p>
+                </div>
+            </div>
+
+            <div id="warranty-tab" style="display: none;">
+                <h2 style="font-family: 'Playfair Display', serif; color: var(--primary); margin-bottom: 2rem; font-size: 1.8rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; letter-spacing: 1px;">Tra Cứu Bảo Hành</h2>
+                <div id="contact-history" style="max-height: 400px; overflow-y: auto; padding-right: 10px; background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px;">
+                    <p style="color: var(--text-muted); margin: 0;">Chưa có dữ liệu.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+ 
+    <!-- Rating Modal -->
+    <div id="rating-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+        <div style="background: #ffffff; padding: 3rem; border-radius: 0; border: 1px solid var(--border); width: 100%; max-width: 500px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+            <button onclick="document.getElementById('rating-modal').style.display='none'" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: #121212; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            <h3 style="font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 300; letter-spacing: 1.5px; margin-bottom: 1rem; color: #121212; text-align: center; text-transform: uppercase;">Đánh Giá Dịch Vụ</h3>
+            <p style="text-align: center; color: #666666; margin-bottom: 2rem;">Vui lòng chia sẻ cảm nhận của bạn về chất lượng dịch vụ tại Mercedes-Benz Việt Nam.</p>
+            
+            <form id="rating-form">
+                <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; font-size: 2.5rem; cursor: pointer;" id="star-rating">
+                    <span data-value="1" style="color: #cccccc; transition: 0.2s;">★</span>
+                    <span data-value="2" style="color: #cccccc; transition: 0.2s;">★</span>
+                    <span data-value="3" style="color: #cccccc; transition: 0.2s;">★</span>
+                    <span data-value="4" style="color: #cccccc; transition: 0.2s;">★</span>
+                    <span data-value="5" style="color: #cccccc; transition: 0.2s;">★</span>
+                </div>
+                <input type="hidden" id="rating-value" value="0" required>
+                <div style="margin-bottom: 1.5rem;">
+                    <textarea id="rating-message" rows="4" placeholder="Nhập đánh giá của bạn (tùy chọn)..." style="width: 100%; padding: 0.8rem; background: #ffffff; border: 1px solid var(--border); color: #121212; border-radius: 0; font-family: 'Inter', sans-serif; resize: vertical; outline: none;"></textarea>
+                </div>
+                <button type="submit" class="btn-gold" style="width: 100%;">GỬI ĐÁNH GIÁ</button>
+            </form>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+    <script>
+        // Rating Modal Logic
+        const stars = document.querySelectorAll('#star-rating span');
+        let currentRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                currentRating = parseInt(star.getAttribute('data-value'));
+                document.getElementById('rating-value').value = currentRating;
+                stars.forEach((s, index) => {
+                    s.style.color = index < currentRating ? 'var(--primary)' : '#444';
+                });
+            });
+            star.addEventListener('mouseover', () => {
+                const hoverVal = parseInt(star.getAttribute('data-value'));
+                stars.forEach((s, index) => {
+                    if (index < hoverVal) s.style.color = 'var(--primary)';
+                    else if (index >= currentRating) s.style.color = '#444';
+                });
+            });
+            star.addEventListener('mouseout', () => {
+                stars.forEach((s, index) => {
+                    s.style.color = index < currentRating ? 'var(--primary)' : '#444';
+                });
+            });
+        });
+
+        document.getElementById('rating-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const rating = document.getElementById('rating-value').value;
+            if (rating == 0) {
+                alert('Vui lòng chọn số sao đánh giá!');
+                return;
+            }
+            const message = document.getElementById('rating-message').value;
+            const user = API.getCurrentUser();
+            
+            const data = {
+                name: user.name,
+                email: user.email,
+                message: `[Đánh giá ${rating} sao] ${message}`
+            };
+
+            try {
+                const res = await fetch('/api/contacts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                if (res.ok) {
+                    alert('Cảm ơn bạn đã đánh giá dịch vụ của chúng tôi!');
+                    document.getElementById('rating-modal').style.display = 'none';
+                    document.getElementById('rating-form').reset();
+                    currentRating = 0;
+                    stars.forEach(s => s.style.color = '#444');
+                    // Reload contact history to show the new rating message
+                    location.reload();
+                }
+            } catch (err) {
+                alert('Có lỗi xảy ra, vui lòng thử lại sau.');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = API.getCurrentUser();
+            if (!user) return window.location.href = '/login';
+
+            // Khởi tạo style cho các nút tab
+            window.switchTab = function(tabId) {
+                const tabs = ['account', 'orders', 'bookings', 'warranty'];
+                tabs.forEach(t => {
+                    document.getElementById(t + '-tab').style.display = t === tabId ? 'block' : 'none';
+                    const navBtn = document.getElementById('nav-' + t);
+                    if (t === tabId) {
+                        navBtn.classList.add('active');
+                    } else {
+                        navBtn.classList.remove('active');
+                    }
+                });
+            };
+
+            document.getElementById('user-name-side').textContent = user.name;
+            let roleText = 'KHÁCH HÀNG';
+            if (user.role === 'admin') {
+                roleText = 'QUẢN TRỊ VIÊN';
+            } else if (user.role === 'employee' || user.role === 'staff') {
+                roleText = 'NHÂN VIÊN';
+            }
+            document.getElementById('user-email-side').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${roleText}`;
+            
+            // Populate account form
+            document.getElementById('acc-name').value = user.name || '';
+            document.getElementById('acc-email').value = user.email || '';
+            document.getElementById('acc-phone').value = user.phone || '0999999999';
+            document.getElementById('acc-dob').value = user.dob || 'dd/mm/yyyy';
+            document.getElementById('acc-address').value = user.address || '';
+            
+            const initialEl = document.getElementById('user-initial');
+            if (user.avatar) {
+                initialEl.innerHTML = `<img src="${user.avatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            } else {
+                initialEl.textContent = user.name.charAt(0).toUpperCase();
+            }
+
+            // Handle Avatar Upload
+            document.getElementById('avatar-input').onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const base64 = event.target.result;
+                        user.avatar = base64;
+                        localStorage.setItem('user', JSON.stringify(user));
+                        initialEl.innerHTML = `<img src="${base64}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        alert('Đã cập nhật ảnh đại diện thành công!');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+
+            // Fetch History
+            try {
+                const [ordersRes, bookingsRes, contactsRes] = await Promise.all([
+                    fetch('/api/orders').then(r => r.json()),
+                    fetch('/api/bookings').then(r => r.json()),
+                    fetch(`/api/contacts?email=${user.email}`).then(r => r.json())
+                ]);
+
+                const userOrders = Array.isArray(ordersRes) ? ordersRes.filter(o => o.userId === user._id) : [];
+                const userBookings = Array.isArray(bookingsRes) ? bookingsRes.filter(b => b.userId === user._id) : [];
+                const userContacts = Array.isArray(contactsRes) ? contactsRes : [];
+
+                const orderContainer = document.getElementById('order-history');
+                if (userOrders.length > 0) {
+                    orderContainer.innerHTML = userOrders.map(o => `
+                        <div class="history-item">
+                            <div>
+                                <p style="font-weight: 600;">${o.vehicleName || (o.items && o.items[0] ? o.items[0].name : 'Sản phẩm')}</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Ngày đặt: ${new Date(o.createdAt).toLocaleDateString('vi-VN')}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="font-weight: 600; color: var(--primary);">${new Intl.NumberFormat('vi-VN').format(o.depositAmount || o.deposit || 0)}đ</p>
+                                <span class="status-tag">${o.status}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                const bookingContainer = document.getElementById('booking-history');
+                if (userBookings.length > 0) {
+                    bookingContainer.innerHTML = userBookings.map(b => `
+                        <div class="history-item">
+                            <div>
+                                <p style="font-weight: 600; text-transform: capitalize;">${b.type || 'Lái thử'} - ${b.vehicleName || 'Đang chọn xe'}</p>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">${b.date} | ${b.time || b.timeSlot}</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <span class="status-tag">${b.status}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+
+                const contactContainer = document.getElementById('contact-history');
+                if (userContacts.length > 0) {
+                    contactContainer.innerHTML = userContacts.map(c => `
+                        <div style="border-bottom: 1px solid var(--border); padding: 1.5rem 0;">
+                            <p style="font-weight: 600; margin-bottom: 0.5rem;">"${c.message}"</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Gửi ngày: ${new Date(c.createdAt).toLocaleDateString('vi-VN')}</p>
+                            
+                            ${c.reply ? `
+                                <div style="background: #f8f9fa; padding: 1rem; border-radius: 0; border: 1px solid var(--border);">
+                                    <p style="color: var(--primary); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 0.5rem;">Phản hồi từ Mercedes-Benz:</p>
+                                    <p style="color: #333333; font-size: 0.9rem;">${c.reply}</p>
+                                </div>
+                            ` : `
+                                <span style="font-size: 0.7rem; color: #888888; font-style: italic;">Đang chờ phản hồi...</span>
+                            `}
+                        </div>
+                    `).join('');
+                }
+
+            } catch (e) {
+                console.error(e);
+            }
+
+            // Save Profile real
+            window.saveProfile = async function() {
+                try {
+                    const data = {
+                        name: document.getElementById('acc-name').value,
+                        phone: document.getElementById('acc-phone').value,
+                        dob: document.getElementById('acc-dob').value,
+                        address: document.getElementById('acc-address').value
+                    };
+                    const res = await API.updateProfile(user._id, data);
+                    if (res.error) {
+                        alert(res.error);
+                    } else {
+                        alert('Đã lưu thông tin thay đổi thành công!');
+                        document.getElementById('user-name-side').textContent = data.name;
+                    }
+                } catch (e) {
+                    alert('Có lỗi xảy ra khi lưu thông tin');
+                }
+            };
+
+            // Change Password Logic real
+            window.updatePasswordReal = async function() {
+                const oldPass = document.getElementById('acc-old-pass').value;
+                const newPass = document.getElementById('acc-new-pass').value;
+                if (!oldPass || !newPass || newPass.length < 6) {
+                    alert('Vui lòng nhập mật khẩu cũ và mật khẩu mới (ít nhất 6 ký tự)!');
+                    return;
+                }
+                
+                try {
+                    const res = await API.changePassword(user.email, oldPass, newPass);
+                    if (res.error) {
+                        alert(res.error);
+                    } else {
+                        alert('Cập nhật mật khẩu thành công! Vui lòng đăng nhập lại.');
+                        API.logout();
+                    }
+                } catch (e) {
+                    alert('Có lỗi xảy ra khi cập nhật mật khẩu');
+                }
+            };
+        });
+    </script>
+</body>
+
+</html>

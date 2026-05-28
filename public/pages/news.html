@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Tức & Sự Kiện | Mercedes-Benz Việt Nam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #ffffff;
+        }
+        .news-header-section {
+            height: 50vh;
+            min-height: 400px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            display: flex;
+            align-items: center;
+            padding: 0 8%;
+            margin-top: 80px;
+        }
+        .news-header-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        }
+        .news-header-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1000px;
+        }
+        .news-header-eyebrow {
+            color: var(--primary);
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        .news-header-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
+            font-size: 4rem;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .news-header-desc {
+            color: #bbb;
+            font-size: 1.1rem;
+            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2.5rem;
+            padding: 5rem 8%;
+        }
+
+        .news-card {
+            background: #ffffff;
+            border-radius: 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: #121212;
+        }
+
+        .news-card:hover {
+            border-color: #999999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .news-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .news-content {
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .news-date {
+            color: var(--primary);
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .news-card-title {
+            margin: 0 0 1rem;
+            font-size: 1.2rem;
+            font-weight: 400;
+            line-height: 1.4;
+            color: #121212 !important;
+        }
+        .news-card-text {
+            color: #555555;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .news-expanded-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s ease;
+            opacity: 0;
+            border-top: 1px solid transparent;
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .news-card.expanded .news-expanded-content {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+        .news-card {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+
+    <section class="news-header-section">
+        <img src="../images/xe1.jpg" class="news-header-img" alt="Mercedes-Benz News Banner">
+        <div class="news-header-content">
+            <p class="news-header-eyebrow">Mercedes-Benz Journal</p>
+            <h1 class="news-header-title">Tin Tức &amp;<br>Thế Giới Xe</h1>
+            <p class="news-header-desc">Khám phá các công nghệ tiên phong, hành trình phát triển bền vững và thông tin chi tiết về các sự kiện mới nhất từ Mercedes-Benz.</p>
+        </div>
+    </section>
+
+    <div class="news-grid">
+        <div class="news-card" onclick="this.classList.toggle('expanded')">
+            <img src="https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=800" class="news-img" alt="GLC SUV">
+            <div class="news-content">
+                <span class="news-date">15/05/2026</span>
+                <h3 class="news-card-title">Mercedes-Benz GLC thế hệ mới: Chuẩn mực SUV hạng sang tầm trung</h3>
+                <p class="news-card-text">Trải nghiệm những nâng cấp vượt trội về thiết kế, hệ thống giải trí MBUX thế hệ thứ hai và động cơ Mild-Hybrid 48V.</p>
+                <div class="news-expanded-content">
+                    <p>Khám phá chiếc xe biểu tượng gầm cao vừa ra mắt với khả năng vận hành linh hoạt trên cả đường trường và đường địa hình. Nội thất được tinh chỉnh kết hợp không gian rộng rãi cùng loạt tùy chọn bọc da cao cấp. Đặc biệt, khối động cơ EQ Boost thế hệ mới đem đến cảm giác lái bứt tốc và đồng thời tiết kiệm nhiên liệu tối đa, bảo vệ môi trường.</p>
+                </div>
+            </div>
+        </div>
+        <div class="news-card" onclick="this.classList.toggle('expanded')">
+            <img src="https://images.unsplash.com/photo-1554744512-d6c603f27c54?auto=format&fit=crop&q=80&w=800" class="news-img" alt="EQS Sedan">
+            <div class="news-content">
+                <span class="news-date">10/05/2026</span>
+                <h3 class="news-card-title">Kỷ nguyên thuần điện: Ra mắt Mercedes-EQ EQS Sedan cao cấp</h3>
+                <p class="news-card-text">Định nghĩa lại sự xa hoa của kỷ nguyên số với màn hình vô cực MBUX Hyperscreen trải rộng và phạm vi di chuyển ấn tượng.</p>
+                <div class="news-expanded-content">
+                    <p>Tương lai của ngành ô tô đã hiện diện. Dòng xe điện EQS tự hào mang ngôn ngữ thiết kế Sensual Purity đặc trưng của Mercedes. Việc trang bị viên pin dung lượng khổng lồ giúp quãng đường di chuyển có thể lên tới hơn 700km sau một lần sạc đầy. Hơn nữa, những tính năng thông minh trên MBUX có khả năng học hỏi và tự điều chỉnh theo thói quen của người lái.</p>
+                </div>
+            </div>
+        </div>
+        <div class="news-card" onclick="this.classList.toggle('expanded')">
+            <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=800" class="news-img" alt="AMG GT">
+            <div class="news-content">
+                <span class="news-date">02/05/2026</span>
+                <h3 class="news-card-title">Đội đua Mercedes-AMG Petronas F1 sẵn sàng cho mùa giải mới</h3>
+                <p class="news-card-text">Công nghệ từ xe đua F1 được ứng dụng trực tiếp lên các mẫu xe thương mại Mercedes-AMG E PERFORMANCE hàng đầu.</p>
+                <div class="news-expanded-content">
+                    <p>Khẳng định khát khao chiến thắng và duy trì vị thế thống trị đường đua, các kỹ sư từ Mercedes-AMG đã và đang liên tục thử nghiệm những hệ thống khí động học đột phá. Những sáng kiến giá trị nhất từ F1 sẽ được tinh chỉnh và trang bị trên các mẫu siêu xe AMG bản thương mại, giúp đem lại khả năng tăng tốc chóng mặt từ 0 - 100km/h chỉ trong vỏn vẹn dưới 3 giây.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+</body>
+</html>

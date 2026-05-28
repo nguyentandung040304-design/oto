@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ưu Đãi Dịch Vụ | Mercedes-Benz Việt Nam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        body {
+            background: #ffffff;
+            color: #121212;
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-section {
+            background: url('../images/banner2.jpg') center/cover no-repeat;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #fff;
+        }
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .services-layout {
+            padding: 5rem 8% 5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .service-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .service-img-wrapper {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+        .service-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .service-img-wrapper:hover .service-img {
+            transform: scale(1.05);
+        }
+        .service-title {
+            font-size: 2.2rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            color: #121212;
+            letter-spacing: 1px;
+        }
+        .service-desc {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        .service-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #121212;
+            color: #fff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .service-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <header></header>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Ưu đãi Dịch vụ</h1>
+        </div>
+    </div>
+
+    <main class="services-layout">
+        <div class="service-block">
+            <div class="service-img-wrapper">
+                <img src="../images/xe2.jpg" alt="Ưu đãi Dịch vụ khách hàng" class="service-img">
+            </div>
+            <div>
+                <h2 class="service-title">Đặc Quyền Dành Riêng Cho Bạn</h2>
+                <p class="service-desc">Khám phá các chương trình ưu đãi đặc quyền dành riêng cho chủ nhân Mercedes-Benz. Từ gói bảo dưỡng trọn gói, nâng cấp phần mềm, đến các phụ kiện chính hãng với mức giá hấp dẫn. Chúng tôi luôn mong muốn mang lại giá trị gia tăng tối đa cho hành trình của bạn.</p>
+                <p class="service-desc">Chương trình Khách hàng Thân thiết mang đến những trải nghiệm dịch vụ đỉnh cao, ưu tiên xếp lịch và nhiều phần quà tri ân giá trị hàng năm.</p>
+                <a href="/booking" class="service-btn">Nhận Ưu Đãi Ngay</a>
+            </div>
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <script src="../js/api.js"></script>
+    <script src="../js/navigation.js"></script>
+</body>
+</html>
