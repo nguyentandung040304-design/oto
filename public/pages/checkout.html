@@ -205,8 +205,9 @@
             const id = params.get('vehicleId');
             if (id) {
                 currentVehicle = await API.getVehicle(id);
+                const imgSrc = currentVehicle.images?.[0] || '../images/placeholder.png';
                 document.getElementById('vehicle-preview').innerHTML = `
-                    <img src="${currentVehicle.images[0]}" style="width: 100%; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                    <img src="${imgSrc}" style="width: 100%; border-radius: 8px; margin-bottom: 1.5rem; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" onerror="this.style.display='none'">
                     <h4 style="color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; margin-bottom: 0.3rem;">${currentVehicle.brand}</h4>
                     <p style="font-weight: 500; font-size: 1.1rem; color: #ffffff;">${currentVehicle.name}</p>
                 `;

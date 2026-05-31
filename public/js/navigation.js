@@ -1614,7 +1614,6 @@ if (document.readyState === 'interactive' || document.readyState === 'complete')
 document.addEventListener('DOMContentLoaded', () => {
     const currentUser = API.getCurrentUser();
     if (currentUser && currentUser.role === 'employee') {
-        document.querySelectorAll('a[href="/admin/products"]').forEach(l => l.style.display = 'none');
         document.querySelectorAll('a[href="/admin/users"]').forEach(l => l.style.display = 'none');
         document.querySelectorAll('nav a[href="/"]').forEach(l => l.textContent = 'Thoát trang quản trị');
     }

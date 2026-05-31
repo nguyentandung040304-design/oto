@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lịch Sử Hoạt Động | Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .product-page-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 0 5% 3rem;
+        }
+
+        .product-filter-sidebar {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1.25rem;
+            position: sticky;
+            top: 90px;
+            align-self: start;
+            max-height: calc(100vh - 110px);
+            overflow-y: auto;
+        }
+
+        .filter-title {
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group h4 {
+            color: var(--text-white);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .filter-search {
+            width: 100%;
+            padding: 0.65rem 0.8rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-white);
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+
+        .filter-search:focus {
+            border-color: var(--primary);
+        }
+
+        .filter-clear {
+            width: 100%;
+            padding: 0.65rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-weight: 600;
+        }
+
+        .filter-clear:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .result-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+        }
+
+        .pagination button {
+            padding: 0.5rem 1rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-white);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--primary);
+            color: #000;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 1024px) {
+            .product-page-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-filter-sidebar {
+                position: static;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <h2>MERCEDES-BENZ ADMIN</h2>
+            <nav>
+                <a href="/admin/dashboard">Tổng Quan</a>
+                <a href="/admin/products">Quản Lý Xe</a>
+                <a href="/admin/orders">Đơn Hàng</a>
+                <a href="/admin/bookings">Lịch Hẹn</a>
+                <a href="/admin/users">Quản Lý Người Dùng</a>
+                <a href="/admin/contacts">Lời Nhắn</a>
+                <a href="/admin/logs" class="active">Lịch Sử Hoạt Động</a>
+                <a href="/" style="margin-top: 5rem;">Thoát trang quản trị</a>
+            </nav>
+        </aside>
+        <main class="main-content" style="padding: 0;">
+            <header
+                style="background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); width: 100%;">
+                <div
+                    style="color: var(--primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem;">
+                    Lịch sử hệ thống</div>
+            </header>
+
+            <div style="padding: 3rem 5% 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Nhật Ký Hoạt Động</h1>
+                </div>
+            </div>
+
+            <div class="product-page-grid">
+                <!-- Filter Sidebar -->
+                <aside class="product-filter-sidebar">
+                    <div class="filter-title">Bộ Lọc Logs</div>
+
+                    <div class="filter-group">
+                        <h4>Hành động</h4>
+                        <select id="f-action" class="filter-search" onchange="fetchLogs(1)">
+                            <option value="">Tất cả</option>
+                            <option value="create">Thêm mới xe (Create)</option>
+                            <option value="update">Cập nhật xe (Update)</option>
+                            <option value="delete">Xóa xe (Delete)</option>
+                            <option value="view">Xem chi tiết xe (View)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Mã xe (Vehicle ID)</h4>
+                        <input type="text" id="f-vehicle-id" class="filter-search" placeholder="ID xe..."
+                            onkeyup="handleEnter(event)">
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>ID Người dùng (User ID)</h4>
+                        <input type="text" id="f-user-id" class="filter-search" placeholder="ID User..."
+                            onkeyup="handleEnter(event)">
+                    </div>
+
+                    <button class="filter-clear" onclick="clearFilters()">Xoá bộ lọc</button>
+                </aside>
+
+                <!-- Content -->
+                <div>
+                    <div class="result-count" id="result-count">Đang tải...</div>
+                    <div class="admin-card">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Thời gian</th>
+                                    <th>Hành động</th>
+                                    <th>Người dùng</th>
+                                    <th>Xe</th>
+                                    <th>Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-log-list"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination" id="pagination">
+                        <!-- Pagination buttons generated here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer></footer>
+
+    <script src="../../js/api.js"></script>
+    <script src="../../js/navigation.js"></script>
+    <script>
+        let currentPage = 1;
+
+        async function fetchLogs(page = 1) {
+            currentPage = page;
+            const action = document.getElementById('f-action').value;
+            const vehicleId = document.getElementById('f-vehicle-id').value;
+            const userId = document.getElementById('f-user-id').value;
+
+            let query = `?page=${page}&limit=20`;
+            if (action) query += `&action=${action}`;
+            if (vehicleId) query += `&vehicleId=${vehicleId}`;
+            if (userId) query += `&userId=${userId}`;
+
+            const response = await fetch('/api/vehicles/logs' + query);
+            const res = await response.json();
+            
+            const tbody = document.getElementById('admin-log-list');
+            const resultCount = document.getElementById('result-count');
+            const pagination = document.getElementById('pagination');
+
+            tbody.innerHTML = '';
+
+            if (res && !res.error && res.data) {
+                const logs = res.data;
+                const pag = res.pagination;
+
+                resultCount.textContent = `Hiển thị ${logs.length} / ${pag.total} logs (Trang ${pag.page}/${pag.totalPages})`;
+
+                if (logs.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem;">Không tìm thấy log nào.</td></tr>`;
+                } else {
+                    logs.forEach(log => {
+                        const date = new Date(log.timestamp).toLocaleString('vi-VN');
+                        const actionColors = {
+                            'create': '#4caf50',
+                            'update': '#2196f3',
+                            'delete': '#f44336',
+                            'view': '#9e9e9e'
+                        };
+                        const color = actionColors[log.action] || '#fff';
+
+                        let userStr = 'Khách (Guest)';
+                        if (log.userEmail) {
+                            userStr = `${log.userEmail} <br><small style="color: var(--text-muted)">${log.userRole}</small>`;
+                        }
+
+                        let vehicleStr = '-';
+                        if (log.vehicleName) {
+                            vehicleStr = `${log.vehicleName} <br><small style="color: var(--text-muted)">${log.vehicleBrand}</small>`;
+                        } else if (log.vehicleId) {
+                            vehicleStr = `ID: ${log.vehicleId}`;
+                        }
+
+                        let extraStr = '';
+                        if (log.changedFields) {
+                            extraStr = `Sửa đổi: ${log.changedFields.join(', ')}`;
+                        }
+
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${date}</td>
+                                <td><strong style="color: ${color}; text-transform: uppercase; font-size: 0.8rem;">${log.action}</strong></td>
+                                <td>${userStr}</td>
+                                <td>${vehicleStr}</td>
+                                <td style="font-size: 0.8rem; color: var(--text-muted)">${extraStr}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                // Render pagination
+                let pageHtml = '';
+                if (pag.totalPages > 1) {
+                    pageHtml += `<button onclick="fetchLogs(${pag.page - 1})" ${pag.page === 1 ? 'disabled' : ''}>Trước</button>`;
+                    pageHtml += `<button disabled>${pag.page} / ${pag.totalPages}</button>`;
+                    pageHtml += `<button onclick="fetchLogs(${pag.page + 1})" ${pag.page === pag.totalPages ? 'disabled' : ''}>Sau</button>`;
+                }
+                pagination.innerHTML = pageHtml;
+
+            } else {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 2rem; color: red;">Lỗi khi tải logs: ${res?.error || 'Unknown'}</td></tr>`;
+                resultCount.textContent = 'Lỗi tải dữ liệu';
+            }
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                fetchLogs(1);
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('f-action').value = '';
+            document.getElementById('f-vehicle-id').value = '';
+            document.getElementById('f-user-id').value = '';
+            fetchLogs(1);
+        }
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchLogs(1);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,5 +1,9 @@
 const nodemailer = require('nodemailer');
 
+function isConfigured() {
+    return Boolean(process.env.EMAIL_USER && process.env.EMAIL_PASS);
+}
+
 function createTransporter() {
     return nodemailer.createTransport({
         service: 'gmail',
@@ -81,4 +85,65 @@ async function sendPasswordResetEmail(toEmail, resetLink) {
     return transporter.sendMail(mailOptions);
 }
 
-module.exports = { sendPasswordResetEmail };
+async function sendContactEmail(contact) {
+    if (!isConfigured()) {
+        console.log('[CONTACT] Email not configured — skip notification for', contact.email);
+        return;
+    }
+    const transporter = createTransporter();
+    const to = process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
+    return transporter.sendMail({
+        from: `"Mercedes-Benz Việt Nam" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: `[Liên hệ mới] ${contact.name || 'Khách hàng'}`,
+        html: `
+            <h2 style="font-family:Arial,sans-serif;">Liên hệ mới từ website</h2>
+            <p><strong>Họ tên:</strong> ${escapeHtml(contact.name || '')}</p>
+            <p><strong>Email:</strong> ${escapeHtml(contact.email || '')}</p>
+            <p><strong>Nội dung:</strong></p>
+            <div style="background:#f7f7f7;padding:12px;border-left:3px solid #d4af37;">
+                ${escapeHtml(contact.message || '').replace(/\n/g, '<br>')}
+            </div>
+            <p style="color:#888;font-size:12px;">Thời gian: ${new Date().toLocaleString('vi-VN')}</p>
+        `
+    });
+}
+
+async function sendReplyEmail(contact, reply) {
+    if (!isConfigured()) {
+        console.log('[REPLY] Email not configured — skip reply to', contact.email);
+        return;
+    }
+    const transporter = createTransporter();
+    return transporter.sendMail({
+        from: `"Mercedes-Benz Việt Nam" <${process.env.EMAIL_USER}>`,
+        to: contact.email,
+        subject: 'Phản hồi liên hệ - Mercedes-Benz Việt Nam',
+        html: `
+            <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:24px;color:#222;">
+                <h2 style="color:#d4af37;">Mercedes-Benz Việt Nam — Phản hồi liên hệ</h2>
+                <p>Xin chào ${escapeHtml(contact.name || 'Quý khách')},</p>
+                <p>Cảm ơn bạn đã liên hệ với chúng tôi. Dưới đây là phản hồi từ đội ngũ tư vấn:</p>
+                <div style="background:#f7f7f7;padding:16px;border-left:3px solid #d4af37;margin:16px 0;">
+                    ${escapeHtml(reply || '').replace(/\n/g, '<br>')}
+                </div>
+                <p style="color:#666;font-size:13px;">Tin nhắn ban đầu của bạn:</p>
+                <blockquote style="color:#888;font-style:italic;border-left:2px solid #ddd;padding-left:12px;">
+                    ${escapeHtml(contact.message || '').replace(/\n/g, '<br>')}
+                </blockquote>
+                <p style="margin-top:24px;">Trân trọng,<br>Mercedes-Benz Việt Nam</p>
+            </div>
+        `
+    });
+}
+
+function escapeHtml(s) {
+    return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+module.exports = { sendPasswordResetEmail, sendContactEmail, sendReplyEmail };
