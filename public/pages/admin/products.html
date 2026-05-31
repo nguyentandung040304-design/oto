@@ -7,6 +7,138 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        .product-page-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            padding: 0 5% 3rem;
+        }
+        .product-filter-sidebar {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1.25rem;
+            position: sticky;
+            top: 90px;
+            align-self: start;
+            max-height: calc(100vh - 110px);
+            overflow-y: auto;
+        }
+        .filter-title {
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        .filter-group h4 {
+            color: var(--text-white);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .filter-search {
+            width: 100%;
+            padding: 0.65rem 0.8rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-white);
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+        .filter-search:focus {
+            border-color: var(--primary);
+        }
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.4rem 0;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: color 0.15s ease;
+        }
+        .filter-option:hover {
+            color: var(--text-white);
+        }
+        .filter-option input[type="checkbox"] {
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+        .filter-option .count {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+        .price-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+        .price-range input {
+            width: 100%;
+            padding: 0.55rem;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            color: var(--text-white);
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.8rem;
+            font-family: inherit;
+        }
+        .price-range input:focus {
+            border-color: var(--primary);
+        }
+        .filter-clear {
+            width: 100%;
+            padding: 0.65rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-weight: 600;
+        }
+        .filter-clear:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+        .result-count {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 1024px) {
+            .product-page-grid {
+                grid-template-columns: 1fr;
+            }
+            .product-filter-sidebar {
+                position: static;
+                max-height: none;
+            }
+        }
+    </style>
 </head>
 <body class="admin-body">
     <div class="admin-layout">
@@ -26,92 +158,135 @@
             <header style="background: rgba(20, 20, 20, 0.8); backdrop-filter: blur(10px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); width: 100%;">
                 <div style="color: var(--primary); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; font-size: 0.8rem;">Quản lý kho xe</div>
             </header>
-            
-            <div style="padding: 3rem 5%;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
-                    <h1 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Danh Mục Siêu Xe</h1>
-                <button class="btn-gold" style="padding: 0.7rem 2rem; font-size: 0.8rem;" onclick="showAddModal()">+ Thêm xe mới</button>
-            </div>
 
-            <!-- Modal Thêm Xe -->
-            <div id="add-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center;">
-                <div class="admin-card" style="width: 550px; max-height: 90vh; overflow-y: auto; padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
-                    <h3 id="modal-title" style="margin-bottom: 2rem; color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.8rem;">Thêm Siêu Xe Mới</h3>
-                    <form id="add-product-form">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                            <input type="text" id="p-name" placeholder="Tên xe" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                            <select id="p-brand" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                                <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn dòng xe (Hãng)</option>
-                                <option value="Mercedes-Benz" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-Benz</option>
-                                <option value="Mercedes-AMG" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-AMG</option>
-                                <option value="Mercedes-Maybach" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-Maybach</option>
-                                <option value="Mercedes-EQ" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-EQ</option>
-                            </select>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                            <input type="number" id="p-price" placeholder="Giá (VND)" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                            <input type="number" id="p-prepaid" placeholder="Trả trước (VND)" style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                            <input type="number" id="p-year" placeholder="Năm sản xuất" style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                            <select id="p-type" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                                <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn phân loại kiểu dáng</option>
-                                <option value="Sedan" style="background: var(--bg-dark); color: var(--text-white);">Sedan</option>
-                                <option value="SUV" style="background: var(--bg-dark); color: var(--text-white);">SUV</option>
-                                <option value="Coupe" style="background: var(--bg-dark); color: var(--text-white);">Coupé</option>
-                                <option value="Cabriolet" style="background: var(--bg-dark); color: var(--text-white);">Mui trần</option>
-                                <option value="Van" style="background: var(--bg-dark); color: var(--text-white);">Van / MPV</option>
-                            </select>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <select id="p-fuel" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                                <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn loại động cơ</option>
-                                <option value="Xăng" style="background: var(--bg-dark); color: var(--text-white);">Động cơ Xăng</option>
-                                <option value="Điện" style="background: var(--bg-dark); color: var(--text-white);">Động cơ Điện</option>
-                                <option value="Hybrid" style="background: var(--bg-dark); color: var(--text-white);">Động cơ Hybrid</option>
-                            </select>
-                            <select id="p-origin" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
-                                <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn nguồn gốc xuất xứ</option>
-                                <option value="Nhập khẩu" style="background: var(--bg-dark); color: var(--text-white);">Nhập khẩu nguyên chiếc</option>
-                                <option value="Lắp ráp" style="background: var(--bg-dark); color: var(--text-white);">Lắp ráp trong nước</option>
-                            </select>
-                        </div>
-                        
-                        <div style="margin-bottom: 2rem;">
-                            <label style="display: block; color: var(--primary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; font-weight: 700;">Hình ảnh siêu xe</label>
-                            <div id="image-preview-container" style="width: 100%; height: 200px; background: var(--bg-dark); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 1rem; cursor: pointer; transition: var(--transition);" onclick="document.getElementById('p-file').click()">
-                                <img id="p-preview" style="width: 100%; height: 100%; display: none; object-fit: cover;">
-                                <div id="preview-placeholder" style="text-align: center; color: var(--text-muted);">
-                                    <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--primary);">+</div>
-                                    <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">Chọn ảnh từ máy</div>
-                                </div>
-                            </div>
-                            <input type="file" id="p-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
-                            <input type="hidden" id="p-img-data">
-                        </div>
-                        <div style="display: flex; gap: 1.5rem;">
-                            <button type="submit" class="btn-gold" style="flex: 1; border: none; font-weight: 700;">LƯU LẠI</button>
-                            <button type="button" onclick="hideAddModal()" style="flex: 1; background: var(--bg-dark); color: var(--text-white); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">HỦY BỎ</button>
-                        </div>
-                    </form>
+            <div style="padding: 3rem 5% 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1 style="font-family: 'Playfair Display'; font-size: 2.5rem;">Danh Mục Siêu Xe</h1>
+                    <button class="btn-gold" style="padding: 0.7rem 2rem; font-size: 0.8rem;" onclick="showAddModal()">+ Thêm xe mới</button>
                 </div>
             </div>
 
-            <div class="admin-card">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Hình ảnh</th>
-                            <th>Tên xe</th>
-                            <th>Hãng</th>
-                            <th>Danh mục</th>
-                            <th>Giá</th>
-                            <th>Kho</th>
-                            <th>Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-product-list"></tbody>
-                </table>
+            <div class="product-page-grid">
+                <!-- Filter Sidebar -->
+                <aside class="product-filter-sidebar">
+                    <div class="filter-title">Bộ Lọc Xe</div>
+
+                    <div class="filter-group">
+                        <h4>Tìm kiếm</h4>
+                        <input type="text" id="f-search" class="filter-search" placeholder="Tên xe...">
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Hãng Xe</h4>
+                        <div id="f-brand-list"></div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Kiểu Dáng</h4>
+                        <div id="f-type-list"></div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Động Cơ</h4>
+                        <div id="f-fuel-list"></div>
+                    </div>
+
+                    <div class="filter-group">
+                        <h4>Khoảng Giá (triệu)</h4>
+                        <div class="price-range">
+                            <input type="number" id="f-min-price" placeholder="Từ" min="0">
+                            <input type="number" id="f-max-price" placeholder="Đến" min="0">
+                        </div>
+                    </div>
+
+                    <button class="filter-clear" onclick="clearFilters()">Xoá bộ lọc</button>
+                </aside>
+
+                <!-- Content -->
+                <div>
+                    <div class="result-count" id="result-count">Đang tải...</div>
+
+                    <!-- Modal Thêm Xe -->
+                    <div id="add-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 2000; align-items: center; justify-content: center;">
+                        <div class="admin-card" style="width: 550px; max-height: 90vh; overflow-y: auto; padding: 2.5rem; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+                            <h3 id="modal-title" style="margin-bottom: 2rem; color: var(--primary); font-family: 'Playfair Display', serif; font-size: 1.8rem;">Thêm Siêu Xe Mới</h3>
+                            <form id="add-product-form">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <input type="text" id="p-name" placeholder="Tên xe" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                    <select id="p-brand" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                        <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn dòng xe (Hãng)</option>
+                                        <option value="Mercedes-Benz" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-Benz</option>
+                                        <option value="Mercedes-AMG" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-AMG</option>
+                                        <option value="Mercedes-Maybach" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-Maybach</option>
+                                        <option value="Mercedes-EQ" style="background: var(--bg-dark); color: var(--text-white);">Mercedes-EQ</option>
+                                    </select>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <input type="number" id="p-price" placeholder="Giá (VND)" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                    <input type="number" id="p-prepaid" placeholder="Trả trước (VND)" style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                    <input type="number" id="p-year" placeholder="Năm sản xuất" style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                    <select id="p-type" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                        <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn phân loại kiểu dáng</option>
+                                        <option value="Sedan" style="background: var(--bg-dark); color: var(--text-white);">Sedan</option>
+                                        <option value="SUV" style="background: var(--bg-dark); color: var(--text-white);">SUV</option>
+                                        <option value="Coupe" style="background: var(--bg-dark); color: var(--text-white);">Coupé</option>
+                                        <option value="Cabriolet" style="background: var(--bg-dark); color: var(--text-white);">Mui trần</option>
+                                        <option value="Van" style="background: var(--bg-dark); color: var(--text-white);">Van / MPV</option>
+                                    </select>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                    <select id="p-fuel" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                        <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn loại động cơ</option>
+                                        <option value="Xăng" style="background: var(--bg-dark); color: var(--text-white);">Động cơ Xăng</option>
+                                        <option value="Điện" style="background: var(--bg-dark); color: var(--text-white);">Động cơ Điện</option>
+                                        <option value="Hybrid" style="background: var(--bg-dark); color: var(--text-white);">Động cơ Hybrid</option>
+                                    </select>
+                                    <select id="p-origin" required style="width: 100%; padding: 0.8rem; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-white); border-radius: 8px; outline: none;">
+                                        <option value="" disabled selected style="background: var(--bg-dark); color: var(--text-white);">Chọn nguồn gốc xuất xứ</option>
+                                        <option value="Nhập khẩu" style="background: var(--bg-dark); color: var(--text-white);">Nhập khẩu nguyên chiếc</option>
+                                        <option value="Lắp ráp" style="background: var(--bg-dark); color: var(--text-white);">Lắp ráp trong nước</option>
+                                    </select>
+                                </div>
+
+                                <div style="margin-bottom: 2rem;">
+                                    <label style="display: block; color: var(--primary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; font-weight: 700;">Hình ảnh siêu xe</label>
+                                    <div id="image-preview-container" style="width: 100%; height: 200px; background: var(--bg-dark); border: 2px dashed var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 1rem; cursor: pointer; transition: var(--transition);" onclick="document.getElementById('p-file').click()">
+                                        <img id="p-preview" style="width: 100%; height: 100%; display: none; object-fit: cover;">
+                                        <div id="preview-placeholder" style="text-align: center; color: var(--text-muted);">
+                                            <div style="font-size: 2.5rem; margin-bottom: 0.5rem; color: var(--primary);">+</div>
+                                            <div style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">Chọn ảnh từ máy</div>
+                                        </div>
+                                    </div>
+                                    <input type="file" id="p-file" accept="image/*" style="display: none;" onchange="handleFileSelect(event)">
+                                    <input type="hidden" id="p-img-data">
+                                </div>
+                                <div style="display: flex; gap: 1.5rem;">
+                                    <button type="submit" class="btn-gold" style="flex: 1; border: none; font-weight: 700;">LƯU LẠI</button>
+                                    <button type="button" onclick="hideAddModal()" style="flex: 1; background: var(--bg-dark); color: var(--text-white); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 0.8rem; font-weight: 600;">HỦY BỎ</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="admin-card">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Hình ảnh</th>
+                                    <th>Tên xe</th>
+                                    <th>Hãng</th>
+                                    <th>Danh mục</th>
+                                    <th>Giá</th>
+                                    <th>Kho</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-product-list"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -121,16 +296,29 @@
     <script src="../../js/navigation.js"></script>
     <script>
         let editingId = null;
+        let allProducts = [];
+        const activeFilters = {
+            search: '',
+            brands: new Set(),
+            types: new Set(),
+            fuels: new Set(),
+            minPrice: null,
+            maxPrice: null
+        };
+
+        function escapeHtml(s) {
+            return String(s ?? '')
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
 
         function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64Data = e.target.result;
                 document.getElementById('p-img-data').value = base64Data;
-                
                 const preview = document.getElementById('p-preview');
                 preview.src = base64Data;
                 preview.style.display = 'block';
@@ -139,26 +327,22 @@
             reader.readAsDataURL(file);
         }
 
-        function showAddModal() { 
+        function showAddModal() {
             editingId = null;
             document.getElementById('modal-title').innerText = 'Thêm Siêu Xe Mới';
             document.getElementById('add-product-form').reset();
-            
-            // Reset preview
             document.getElementById('p-preview').style.display = 'none';
             document.getElementById('preview-placeholder').style.display = 'block';
             document.getElementById('p-img-data').value = '';
-            
-            document.getElementById('add-modal').style.display = 'flex'; 
+            document.getElementById('add-modal').style.display = 'flex';
         }
-        
+
         function hideAddModal() { document.getElementById('add-modal').style.display = 'none'; }
 
         async function showEditModal(id) {
             editingId = id;
             document.getElementById('modal-title').innerText = 'Chỉnh Sửa Siêu Xe';
             const vehicle = await API.getVehicle(id);
-            
             document.getElementById('p-name').value = vehicle.name;
             document.getElementById('p-brand').value = vehicle.brand;
             document.getElementById('p-type').value = vehicle.type || '';
@@ -167,50 +351,123 @@
             document.getElementById('p-year').value = vehicle.year || 2024;
             document.getElementById('p-fuel').value = vehicle.fuel || 'Xăng';
             document.getElementById('p-origin').value = vehicle.origin || 'Nhập khẩu';
-            
-            // Set preview for existing image
-            const base64Data = vehicle.images[0];
+
+            const base64Data = vehicle.images?.[0] || '';
             document.getElementById('p-img-data').value = base64Data;
             const preview = document.getElementById('p-preview');
-            preview.src = base64Data;
-            preview.style.display = 'block';
-            document.getElementById('preview-placeholder').style.display = 'none';
-            
+            if (base64Data) {
+                preview.src = base64Data;
+                preview.style.display = 'block';
+                document.getElementById('preview-placeholder').style.display = 'none';
+            } else {
+                preview.style.display = 'none';
+                document.getElementById('preview-placeholder').style.display = 'block';
+            }
             document.getElementById('add-modal').style.display = 'flex';
         }
 
-        async function loadProducts() {
-            const products = await API.getVehicles();
-            const list = document.getElementById('admin-product-list');
-            list.innerHTML = '';
-            products.forEach(p => {
-                list.innerHTML += `
-                    <tr>
-                        <td><img src="${p.images[0]}" style="width: 80px; height: 50px; border-radius: 8px; object-fit: cover;"></td>
-                        <td><strong>${p.name}</strong></td>
-                        <td>${p.brand}</td>
-                        <td><span style="background: rgba(255,255,255,0.08); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem;">${p.type || 'Chưa phân loại'}</span></td>
-                        <td style="color: var(--primary); font-weight: 700; font-family: 'Inter', sans-serif;">${new Intl.NumberFormat('vi-VN').format(p.price)} đ</td>
-                        <td>${p.stock}</td>
-                        <td>
-                            <div style="display: flex; gap: 0.8rem;">
-                                <button onclick="showEditModal('${p._id}')" style="background: rgba(193, 163, 95, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: var(--transition);" onmouseover="this.style.background='var(--primary)'; this.style.color='black'" onmouseout="this.style.background='rgba(193, 163, 95, 0.1)'; this.style.color='var(--primary)'">Sửa</button>
-                                <button onclick="deleteProduct('${p._id}')" style="background: rgba(255, 77, 77, 0.05); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600; transition: var(--transition);" onmouseover="this.style.background='#ff4d4d'; this.style.color='white'" onmouseout="this.style.background='rgba(255, 77, 77, 0.05)'; this.style.color='#ff4d4d'">Xóa</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+        function buildFilterList(containerId, values, setRef) {
+            const counts = {};
+            allProducts.forEach(p => {
+                const v = p[containerId.includes('brand') ? 'brand' : containerId.includes('type') ? 'type' : 'fuel'];
+                if (v) counts[v] = (counts[v] || 0) + 1;
             });
+            const sorted = [...values].sort();
+            const html = sorted.map(v => `
+                <label class="filter-option">
+                    <input type="checkbox" value="${escapeHtml(v)}" ${setRef.has(v) ? 'checked' : ''}>
+                    <span>${escapeHtml(v)}</span>
+                    <span class="count">${counts[v] || 0}</span>
+                </label>
+            `).join('');
+            const container = document.getElementById(containerId);
+            container.innerHTML = html || '<span style="color:var(--text-muted);font-size:0.8rem;">Không có</span>';
+            container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    if (cb.checked) setRef.add(cb.value);
+                    else setRef.delete(cb.value);
+                    applyFilters();
+                });
+            });
+        }
+
+        function buildAllFilters() {
+            const brands = new Set(allProducts.map(p => p.brand).filter(Boolean));
+            const types = new Set(allProducts.map(p => p.type).filter(Boolean));
+            const fuels = new Set(allProducts.map(p => p.fuel).filter(Boolean));
+            buildFilterList('f-brand-list', brands, activeFilters.brands);
+            buildFilterList('f-type-list', types, activeFilters.types);
+            buildFilterList('f-fuel-list', fuels, activeFilters.fuels);
+        }
+
+        function applyFilters() {
+            const q = activeFilters.search.trim().toLowerCase();
+            const minP = activeFilters.minPrice;
+            const maxP = activeFilters.maxPrice;
+            const filtered = allProducts.filter(p => {
+                if (q && !(p.name || '').toLowerCase().includes(q)) return false;
+                if (activeFilters.brands.size && !activeFilters.brands.has(p.brand)) return false;
+                if (activeFilters.types.size && !activeFilters.types.has(p.type)) return false;
+                if (activeFilters.fuels.size && !activeFilters.fuels.has(p.fuel)) return false;
+                if (minP !== null && p.price < minP) return false;
+                if (maxP !== null && p.price > maxP) return false;
+                return true;
+            });
+            renderProducts(filtered);
+        }
+
+        function renderProducts(products) {
+            const list = document.getElementById('admin-product-list');
+            document.getElementById('result-count').textContent =
+                `Hiển thị ${products.length} / ${allProducts.length} xe`;
+
+            if (products.length === 0) {
+                list.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--text-muted);">Không có xe phù hợp với bộ lọc</td></tr>`;
+                return;
+            }
+
+            list.innerHTML = products.map(p => `
+                <tr>
+                    <td><img src="${escapeHtml(p.images?.[0] || '')}" style="width: 80px; height: 50px; border-radius: 8px; object-fit: cover;" onerror="this.style.display='none'"></td>
+                    <td><strong>${escapeHtml(p.name)}</strong></td>
+                    <td>${escapeHtml(p.brand)}</td>
+                    <td><span style="background: rgba(255,255,255,0.08); padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem;">${escapeHtml(p.type || 'Chưa phân loại')}</span></td>
+                    <td style="color: var(--primary); font-weight: 700; font-family: 'Inter', sans-serif;">${new Intl.NumberFormat('vi-VN').format(p.price || 0)} đ</td>
+                    <td>${escapeHtml(p.stock ?? 0)}</td>
+                    <td>
+                        <div style="display: flex; gap: 0.8rem;">
+                            <button onclick="showEditModal('${escapeHtml(p._id)}')" style="background: rgba(193, 163, 95, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600;">Sửa</button>
+                            <button onclick="deleteProduct('${escapeHtml(p._id)}')" style="background: rgba(255, 77, 77, 0.05); border: 1px solid #ff4d4d; color: #ff4d4d; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 600;">Xóa</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function clearFilters() {
+            activeFilters.search = '';
+            activeFilters.brands.clear();
+            activeFilters.types.clear();
+            activeFilters.fuels.clear();
+            activeFilters.minPrice = null;
+            activeFilters.maxPrice = null;
+            document.getElementById('f-search').value = '';
+            document.getElementById('f-min-price').value = '';
+            document.getElementById('f-max-price').value = '';
+            buildAllFilters();
+            applyFilters();
+        }
+
+        async function loadProducts() {
+            allProducts = await API.getVehicles();
+            buildAllFilters();
+            applyFilters();
         }
 
         document.getElementById('add-product-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const imageData = document.getElementById('p-img-data').value;
-            if (!imageData) {
-                alert('Vui lòng chọn ảnh cho siêu xe!');
-                return;
-            }
+            if (!imageData) { alert('Vui lòng chọn ảnh cho siêu xe!'); return; }
 
             const productData = {
                 name: document.getElementById('p-name').value,
@@ -226,38 +483,44 @@
                 isActive: true
             };
 
-            let res;
-            if (editingId) {
-                // Update existing
-                res = await fetch(`/api/vehicles/${editingId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(productData)
-                });
-            } else {
-                // Create new
-                res = await fetch('/api/vehicles', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(productData)
-                });
-            }
+            const url = editingId ? `/api/vehicles/${editingId}` : '/api/vehicles';
+            const res = await fetch(url, {
+                method: editingId ? 'PUT' : 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData)
+            });
 
             if (res.ok) {
                 hideAddModal();
                 loadProducts();
             } else {
-                const error = await res.json();
-                alert('Lỗi: ' + (error.message || 'Không thể lưu dữ liệu'));
+                const error = await res.json().catch(() => ({}));
+                alert('Lỗi: ' + (error.error || error.message || 'Không thể lưu dữ liệu'));
             }
         });
 
         async function deleteProduct(id) {
-            if (confirm('Bạn có chắc muốn gỡ siêu xe này khỏi danh mục?')) {
-                const res = await fetch(`/api/vehicles/${id}`, { method: 'DELETE' });
-                if (res.ok) loadProducts();
-            }
+            if (!confirm('Bạn có chắc muốn gỡ siêu xe này khỏi danh mục?')) return;
+            const res = await fetch(`/api/vehicles/${id}`, { method: 'DELETE' });
+            if (res.ok) loadProducts();
+            else alert('Không thể xoá xe — vui lòng đăng nhập lại với quyền admin.');
         }
+
+        // Filter input bindings
+        document.getElementById('f-search').addEventListener('input', (e) => {
+            activeFilters.search = e.target.value;
+            applyFilters();
+        });
+        document.getElementById('f-min-price').addEventListener('input', (e) => {
+            const v = parseFloat(e.target.value);
+            activeFilters.minPrice = Number.isFinite(v) ? v * 1_000_000 : null;
+            applyFilters();
+        });
+        document.getElementById('f-max-price').addEventListener('input', (e) => {
+            const v = parseFloat(e.target.value);
+            activeFilters.maxPrice = Number.isFinite(v) ? v * 1_000_000 : null;
+            applyFilters();
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             const admin = API.getCurrentUser();
